@@ -1,0 +1,597 @@
+<!doctype html>
+
+<meta name="robots" content="noindex">
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Webduino Blockly App</title>
+<script src="https://blocklypro.webduino.io/components/jquery/dist/jquery.min.js"></script>
+<script src="https://blocklypro.webduino.io/dist/lib/webduino-all-0.4.20.min.js"></script>
+<script src="https://blocklypro.webduino.io/dist/webduino-blockly.min.js"></script>
+<script src="https://blocklypro.webduino.io/dist/lib/firebase.min.js"></script>
+<script src="https://blocklypro.webduino.io/dist/lib/runtime.min.js"></script>
+</head>
+<body>
+<div id="demo-area-01-show"></div>
+<script id="jsbin-javascript">
+var photocell;
+var temp;
+var humidity;
+/*function getgps(){
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    console.log("Geolocation is not supported by this browser.");
+  }
+  function showPosition(position) {
+    lat = position.coords.latitude
+    long = position.coords.longitude;
+    console.log(lat,long);
+    $.ajax({
+      url: "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+long+"&key=AIzaSyB8uBoHMmnwYj8CBPBGyquKhZu0xCWNDmg",
+      dataType: "jsonp",
+      success: function(response) {
+        result = response;
+        console.log(result)
+      },
+      error: function(response) {
+        console.log("error");
+      }
+    });
+  }
+}*/
+//getgps();
+ function getdata(name){
+  $.ajax({
+    url: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22"+name+"%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys",
+    dataType: "jsonp",
+    success: function(response) {
+      result = response;
+      city = result["query"]["results"]["channel"]["location"]["city"];
+      tamp = result["query"]["results"]["channel"]["item"]["condition"]["temp"]; //華式
+      tamp = Math.round((tamp-32)*5/9);
+      humidity = result["query"]["results"]["channel"]["atmosphere"]["humidity"]; //濕度
+      speak('您在'+city+',溫度為攝氏'+tamp+'度,濕度為'+humidity, ["zh-TW",1,1,1.5]);
+    },
+    error: function(response) {
+      console.log("error");
+    }
+  });
+}
+/*
+boardReady({device: 'nWxRb'}, function (board) {
+  board.samplingInterval = 1000;
+  photocell = getPhotocell(board, 5);
+  photocell.measure(function (val) {
+    photocell.detectedVal = val;
+    console.log(photocell.detectedVal);
+    if(photocell.detectedVal < 0.5 && light_state == true) {
+      photocell.off();
+      light_state = false;
+      function speechRecognition4() {
+        if (!('webkitSpeechRecognition' in window)) {
+          alert('本瀏覽器不支援語音辨識，請更換瀏覽器！(Chrome 25 版以上才支援語音辨識)');
+        } else {
+          window._recognition = new webkitSpeechRecognition();
+          window._recognition.continuous = true;
+          window._recognition.interimResults = true;
+          window._recognition.lang = 'cmn-Hant-TW';
+
+          window._recognition.onstart = function() {
+            window._recognition.status = true;
+          };
+
+          window._recognition.onend = function() {
+            if (window._recognition.status) {
+               window._recognition.start();
+            }
+          };
+
+          window._recognition.onresult = function (event,result) {
+            result = {};
+            result.resultLength = event.results.length - 1;
+            result.resultTranscript = event.results[result.resultLength][0].transcript;
+            if (event.results[result.resultLength].isFinal === false) {
+              if (result.resultTranscript.indexOf('天氣') !== -1) {
+              window._recognition.status = false;
+              window._recognition.stop();
+              speak('請問要查詢目前所在位置還是其他縣市的天氣',["zh-TW",1,1,1.5], function () {
+                
+            speechRecognition();
+            function speechRecognition() {
+              if (!('webkitSpeechRecognition' in window)) {
+                alert('本瀏覽器不支援語音辨識，請更換瀏覽器！(Chrome 25 版以上才支援語音辨識)');
+              } else {
+                window._recognition = new webkitSpeechRecognition();
+                window._recognition.continuous = true;
+                window._recognition.interimResults = true;
+                window._recognition.lang = 'cmn-Hant-TW';
+
+                window._recognition.onstart = function() {
+                  window._recognition.status = true;
+                };
+
+                window._recognition.onend = function() {
+                  if (window._recognition.status) {
+                     window._recognition.start();
+                  }
+                };
+
+                window._recognition.onresult = function (event,result) {
+                  result = {};
+                  result.resultLength = event.results.length - 1;
+                  result.resultTranscript = event.results[result.resultLength][0].transcript;
+                  if (event.results[result.resultLength].isFinal === false) {
+                    if (result.resultTranscript.indexOf('目前') !== -1) {
+                      window._recognition.status = false;
+                      window._recognition.stop();
+                      speak('目前所在位置天氣為', ["zh-TW",1,1,1.5]);
+                      getdata("Tainan");
+                      light_state = true;
+                    }
+                  } else if (event.results[result.resultLength].isFinal === true) {
+                    console.log('final');
+                  }
+                };
+                window._recognition.start();
+              }
+            }
+            function speechRecognition3() {
+              if (!('webkitSpeechRecognition' in window)) {
+                alert('本瀏覽器不支援語音辨識，請更換瀏覽器！(Chrome 25 版以上才支援語音辨識)');
+              } else {
+                window._recognition = new webkitSpeechRecognition();
+                window._recognition.continuous = true;
+                window._recognition.interimResults = true;
+                window._recognition.lang = 'cmn-Hant-TW';
+
+                window._recognition.onstart = function() {
+                  window._recognition.status = true;
+                };
+
+                window._recognition.onend = function() {
+                  if (window._recognition.status) {
+                     window._recognition.start();
+                  }
+                };
+
+                window._recognition.onresult = function (event,result) {
+                  result = {};
+                  result.resultLength = event.results.length - 1;
+                  result.resultTranscript = event.results[result.resultLength][0].transcript;
+                  if (event.results[result.resultLength].isFinal === false) {
+                    if (result.resultTranscript.indexOf('其他') !== -1) {
+                window._recognition.status = false;
+                window._recognition.stop();
+                speak('請問要查詢哪一個縣市',["zh-TW",1,1,1.5], function () {
+                  function speechRecognition2() {
+                    if (!('webkitSpeechRecognition' in window)) {
+                      alert('本瀏覽器不支援語音辨識，請更換瀏覽器！(Chrome 25 版以上才支援語音辨識)');
+                    } else {
+                      window._recognition = new webkitSpeechRecognition();
+                      window._recognition.continuous = true;
+                      window._recognition.interimResults = true;
+                      window._recognition.lang = 'cmn-Hant-TW';
+
+                      window._recognition.onstart = function() {
+                        window._recognition.status = true;
+                      };
+
+                      window._recognition.onend = function() {
+                        if (window._recognition.status) {
+                           window._recognition.start();
+                        }
+                      };
+
+                      window._recognition.onresult = function (event,result) {
+                        result = {};
+                        result.resultLength = event.results.length - 1;
+                        result.resultTranscript = event.results[result.resultLength][0].transcript;
+                        if (event.results[result.resultLength].isFinal === false) {
+                          if (result.resultTranscript.indexOf('台北') !== -1) {
+                            getdata("Taipei");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                            light_state = true;
+                          }
+                          else if (result.resultTranscript.indexOf('新北') !== -1) {
+                            getdata("New Taipei");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                            light_state = true;
+                          }
+                          else if (result.resultTranscript.indexOf('宜蘭') !== -1) {
+                            getdata("Ilan");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                            light_state = true;
+                          }
+                          else if (result.resultTranscript.indexOf('花蓮') !== -1) {
+                            getdata("Hualien");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                            light_state = true;
+                          }
+                          else if (result.resultTranscript.indexOf('金門') !== -1) {
+                            getdata("Kinmen");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                            light_state = true;
+                          }
+                          else if (result.resultTranscript.indexOf('南投') !== -1) {
+                            getdata("Nantou");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                            light_state = true;
+                          }
+                          else if (result.resultTranscript.indexOf('屏東') !== -1) {
+                            getdata("Pingtung");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('苗栗') !== -1) {
+                            getdata("Miaoli");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('桃園') !== -1) {
+                            getdata("Taoyuan");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('高雄') !== -1) {
+                            getdata("Kaohsiung");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('基隆') !== -1) {
+                            getdata("Keelung");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('連江') !== -1) {
+                            getdata("Lianjiang");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('雲林') !== -1) {
+                            getdata("Yunlin");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('嘉義') !== -1) {
+                            getdata("Chiayi");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('雲林') !== -1) {
+                            getdata("Yunlin");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('彰化') !== -1) {
+                            getdata("Changhua");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('臺中') !== -1) {
+                            getdata("Taichung");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('台東') !== -1) {
+                            getdata("Taitung");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('台南') !== -1) {
+                            getdata("Tainan");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                          else if (result.resultTranscript.indexOf('澎湖') !== -1) {
+                            getdata("Penghu");
+                            window._recognition.status = false;
+                            window._recognition.stop();
+                          }
+                        } else if (event.results[result.resultLength].isFinal === true) {
+                          console.log('final');
+                        }
+                      };
+                      window._recognition.start();
+                    }
+                  }
+                  speechRecognition2();
+
+                },0);
+              }
+                  } else if (event.results[result.resultLength].isFinal === true) {
+                    console.log('final');
+                  }
+                };
+                window._recognition.start();
+              }
+            }
+            speechRecognition3();
+
+          },0);
+        }
+            } else if (event.results[result.resultLength].isFinal === true) {
+              console.log('final');
+            }
+          };
+          window._recognition.start();
+        }
+      }
+      speechRecognition4();
+    }
+  });
+});
+*/
+
+
+
+  boardReady({ device: 'nWxRb' }, function (board) {
+    board.systemReset();
+    board.samplingInterval = 250;
+    button = getButton(board, 11);
+    button.on("pressed", function () {
+      console.log("pressed");
+      document.getElementById("demo-area-01-show").innerHTML = '按下';
+      startspeech3();
+    });
+  });
+
+
+// var pcount = 0;
+// var pstate = true;
+// var abs = 0;
+// var det = 0;
+// boardReady({device: 'nWxRb'},  function (board) {
+//   board.samplingInterval = 1000;
+//   photocell = getPhotocell(board, 5);
+//     photocell.measure( function (val) {
+//       photocell.detectedVal = val;
+//       console.log(photocell.detectedVal);
+//       if (pcount != 0) {
+//         //abs = Math.abs((Math.round((det - photocell.detectedVal) * 10000)) / 10000 * 1000); //設定abs(溫差)轉為更好判斷的數值
+//         //console.log("det: "+det+" 光感指數: "+photocell.detectedVal+ " 光感差: "+abs); //測試用
+//           if (photocell.detectedVal < 0.5/*abs > 50*/ && pstate && pcount > 2) { //如果光感變化大於50，則啟動語音辨識1
+//             startspeech3();
+//             pstate = false;
+//           } else if (photocell.detectedVal > 0.5 /*abs < 25>*/ && !pstate && pcount > 2) { //如果光感變化小於25，則重置狀態
+//             pcount = 0;
+//             pstate = true;
+//             }
+//       }
+//       pcount++;
+//       det = val;
+//   });
+//     //  function speechRecognition3(){
+//     //     if (!("webkitSpeechRecognition" in window)) {
+//     //       alert("本瀏覽器不支援語音辨識，請更換瀏覽器！(Chrome 25 版以上才支援語音辨識)");
+//     //     } else{
+//     //       window._recognition = new webkitSpeechRecognition();
+//     //       window._recognition.continuous = true;
+//     //       window._recognition.interimResults = true;
+//     //       window._recognition.lang = "cmn-Hant-TW";
+
+//     //       window._recognition.onstart =  function() {
+//     //         window._recognition.status = true;
+//     //         console.log("Start recognize...");
+//     //       };
+
+//     //       window._recognition.onend =  function() {
+//     //         console.log("Stop recognize");
+//     //         if(window._recognition.status){
+//     //            window._recognition.start();
+//     //         }
+//     //       };
+
+//     //       window._recognition.onresult = function(event,result) {
+//     //         result = {};
+//     //         result.resultLength = event.results.length-1;
+//     //         result.resultTranscript = event.results[result.resultLength][0].transcript;
+//     //         if(event.results[result.resultLength].isFinal===true){
+//     //           console.log(result.resultTranscript);
+//     //             if(result.resultTranscript.indexOf("天氣")!== -1){
+//     //               light_state = false;
+//     //               photocell.off();
+//     //       speak('目前或者其他',["zh-TW",1,1,1.5],function(){
+//     //         function speechRecognition2(){
+//     //           if (!("webkitSpeechRecognition" in window)) {
+//     //             alert("本瀏覽器不支援語音辨識，請更換瀏覽器！(Chrome 25 版以上才支援語音辨識)");
+//     //           } else{
+//     //             window._recognition = new webkitSpeechRecognition();
+//     //             window._recognition.continuous = true;
+//     //             window._recognition.interimResults = true;
+//     //             window._recognition.lang = "cmn-Hant-TW";
+
+//     //             window._recognition.onstart = function() {
+//     //               window._recognition.status = true;
+//     //               console.log("Start recognize...");
+//     //             };
+
+//     //             window._recognition.onend =  function() {
+//     //               console.log("Stop recognize");
+//     //               if(window._recognition.status){
+//     //                  window._recognition.start();
+//     //               }
+//     //             };
+
+//     //             window._recognition.onresult =  function(event,result) {
+//     //               result = {};
+//     //               result.resultLength = event.results.length-1;
+//     //               result.resultTranscript = event.results[result.resultLength][0].transcript;
+//     //               if(event.results[result.resultLength].isFinal===true){
+//     //                 console.log(result.resultTranscript);
+//     //                   if(result.resultTranscript.indexOf("目前")!== -1){
+//     //                     getdata("Tainan");
+//     //                     console.log(event.results[result.resultLength]);
+//     //                 }
+//     //               else if(result.resultTranscript.indexOf("其他")!== -1){
+//     //                     speak('請問要查詢哪一個縣市',["zh-TW",1,1,1.5], function(){
+//     //                function speechRecognition(){
+//     //                 if (!("webkitSpeechRecognition" in window)) {
+//     //                   alert("本瀏覽器不支援語音辨識，請更換瀏覽器！(Chrome 25 版以上才支援語音辨識)");
+//     //                 } else{
+//     //                   window._recognition = new webkitSpeechRecognition();
+//     //                   window._recognition.continuous = true;
+//     //                   window._recognition.interimResults = true;
+//     //                   window._recognition.lang = "cmn-Hant-TW";
+
+//     //                   window._recognition.onstart =  function() {
+//     //                     window._recognition.status = true;
+//     //                     console.log("Start recognize...");
+//     //                   };
+
+//     //                   window._recognition.onend =  function() {
+//     //                     console.log("Stop recognize");
+//     //                     if(window._recognition.status){
+//     //                        window._recognition.start();
+//     //                     }
+//     //                   };
+
+//     //                   window._recognition.onresult =  function(event,result) {
+//     //                     result = {};
+//     //                     result.resultLength = event.results.length-1;
+//     //                     result.resultTranscript = event.results[result.resultLength][0].transcript;
+//     //                     if(event.results[result.resultLength].isFinal===true){
+//     //                       console.log(result.resultTranscript);
+//     //                         if (result.resultTranscript.indexOf('台北') !== -1) {
+//     //                         getdata("Taipei");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('新北') !== -1) {
+//     //                         getdata("New Taipei");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('宜蘭') !== -1) {
+//     //                         getdata("Ilan");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('花蓮') !== -1) {
+//     //                         getdata("Hualien");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('金門') !== -1) {
+//     //                         getdata("Kinmen");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('南投') !== -1) {
+//     //                         getdata("Nantou");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('屏東') !== -1) {
+//     //                         getdata("Pingtung");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('苗栗') !== -1) {
+//     //                         getdata("Miaoli");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('桃園') !== -1) {
+//     //                         getdata("Taoyuan");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('高雄') !== -1) {
+//     //                         getdata("Kaohsiung");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('基隆') !== -1) {
+//     //                         getdata("Keelung");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('連江') !== -1) {
+//     //                         getdata("Lianjiang");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('雲林') !== -1) {
+//     //                         getdata("Yunlin");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('嘉義') !== -1) {
+//     //                         getdata("Chiayi");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('雲林') !== -1) {
+//     //                         getdata("Yunlin");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('彰化') !== -1) {
+//     //                         getdata("Changhua");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('臺中') !== -1) {
+//     //                         getdata("Taichung");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('台東') !== -1) {
+//     //                         getdata("Taitung");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('台南') !== -1) {
+//     //                         getdata("Tainan");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                       else if (result.resultTranscript.indexOf('澎湖') !== -1) {
+//     //                         getdata("Penghu");
+//     //                         window._recognition.status = false;
+//     //                         window._recognition.stop();
+//     //                       }
+//     //                             }else if(event.results[result.resultLength].isFinal===true){
+//     //                       console.log("final");
+//     //                     }
+//     //                   };
+//     //                   window._recognition.start();
+//     //                 }
+//     //               }
+//     //               speechRecognition();
+
+//     //             },0);
+//     //                   console.log(event.results[result.resultLength]);
+//     //                 }
+//     //                       }else if(event.results[result.resultLength].isFinal===true){
+//     //                 console.log("final");
+//     //               }
+//     //             };
+//     //             window._recognition.start();
+//     //           }
+//     //         }
+//     //         speechRecognition2();
+
+//     //       },0);
+//     //             console.log(event.results[result.resultLength]);
+//     //           }
+//     //                 }else if(event.results[result.resultLength].isFinal===true){
+//     //           console.log("final");
+//     //         }
+//     //       };
+//     //       window._recognition.start();
+//     //     }
+//     //   }
+//     //   speechRecognition3();
+//     });
+</script>
+</body>
+</html>
