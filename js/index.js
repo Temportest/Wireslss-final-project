@@ -128,7 +128,21 @@ function call() {
 
 
 //取得你目前位置
-$.getJSON('https://ipinfo.io/json', function (data) {
-  console.log(JSON.stringify(data, null, 2));
-  document.getElementById("area-show").innerHTML = JSON.stringify(data, null, 2);
+var geocoder = new google.maps.Geocoder();
+
+// google.maps.LatLng 物件
+var coord = new google.maps.LatLng(25.0439892, 121.5212213);
+
+// 傳入 latLng 資訊至 geocoder.geocode
+geocoder.geocode({ 'latLng': coord }, function (results, status) {
+  if (status === google.maps.GeocoderStatus.OK) {
+    // 如果有資料就會回傳
+    if (results) {
+      console.log(results[0]);
+    }
+  }
+  // 經緯度資訊錯誤
+  else {
+    alert("Reverse Geocoding failed because: " + status);
+  }
 });

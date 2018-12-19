@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU&callback=initMap"
+      async defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 22.9926949, lng: 120.2155742},
+          zoom: 17
+        });
+      }
+
+      $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?latlng=22.9926949,120.2155742&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU', function (data) {
+          console.log(JSON.stringify(data, null, 2));
+        });
+
+      
+
+    </script>
+    
+  </body>
+</html>
