@@ -99,7 +99,7 @@
 
 function myclick(){
   //speak('請問要查詢哪裡的天氣');
-  var msg = new SpeechSynthesisUtterance('世界你好！');
+  var msg = new SpeechSynthesisUtterance('hello world');
   window.speechSynthesis.speak(msg);
 }
 
