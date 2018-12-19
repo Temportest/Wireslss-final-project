@@ -1,36 +1,49 @@
-let photocell;
-let beforeCell = 0;
-let restart=true;
+let nowDistance; // 目前距離
+let beforDistance = 0; // 前一次距離
+let restart=true; // 初始化
+let dht; // 溫濕度
 boardReady({ device: 'nWxRb' }, function (board) {
   board.systemReset();
-  board.samplingInterval = 500; // 光敏取樣頻率
-  photocell = getPhotocell(board, 1); // A1 腳位
-  onStart(); // 開始偵測光敏
+  board.samplingInterval = 500;
+  ultrasonic = getUltrasonic(board, 8, 9); // 超音波腳位8 9
+  dht = getDht(board, 13);
+  onStartDHT();
+  onStart(); // 開始偵測
 });
 
 function onStart(){
-  photocell.on(function (val) {
-    if (restart){
-      console.log('光敏初始化中...');
-      beforeCell = val;
-      restart=false;
-    }
-      
-    else {
-      let absPhotocell = Math.abs(beforeCell - val);
-      console.log(`before: ${beforeCell} after: ${val} div: ${absPhotocell}`)
-      if (absPhotocell >= 0.02) {
-        console.log('機器人觸發...');
-        restart = true;
-        photocell.off();
-        call();
-      }
-      beforeCell = val;
-    }
-    photocell.detectedVal = val;
+  ultrasonic.ping(function (cm) {
+    nowDistance = ultrasonic.distance;
     document.getElementById("status").innerHTML = '連接成功';
-    document.getElementById("demo-area-01-show").innerHTML = photocell.detectedVal;
-  });
+    if (restart) {
+      console.log('超音波初始化中...');
+      beforDistance = nowDistance;
+      restart = false;
+    }
+    else{
+      let absDistance = Math.abs(nowDistance-beforDistance);
+      console.log("目前距離：" + nowDistance + " 前一次距離：" + beforDistance + " 差距：" + absDistance);
+      document.getElementById("demo-area-01-show").innerHTML = nowDistance;
+      if (absDistance >= 100) {
+        document.getElementById("status").innerHTML = '連接成功[機器人觸發]';
+        document.getElementById("demo-area-01-show").style.color = '#ff0000';
+        restart = true;
+        ultrasonic.stopPing();
+        call();
+      } else {
+        document.getElementById("demo-area-01-show").style.color = '#000000';
+      }
+      beforDistance = nowDistance;
+    }
+    
+  }, 500);
+}
+function onStartDHT(){
+  document.getElementById("demo-area-02-show").style.fontSize = 20 + "px";
+  document.getElementById("demo-area-02-show").style.lineHeight = 20 + "px";
+  dht.read(function (evt) {
+    document.getElementById("demo-area-02-show").innerHTML = (['溫度：', dht.temperature, '度<br/>濕度：', dht.humidity, '%'].join(''));
+  }, 1000);
 }
 
 // 語音辨識初始化
@@ -114,3 +127,8 @@ function call() {
 
 
 
+//取得你目前位置
+$.getJSON('https://ipinfo.io/json', function (data) {
+  console.log(JSON.stringify(data, null, 2));
+  document.getElementById("area-show").innerHTML = JSON.stringify(data, null, 2);
+});
