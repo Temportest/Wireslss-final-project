@@ -101,6 +101,8 @@ function myclick(){
   if ('speechSynthesis' in window) {
     // Synthesis support. Make your web apps talk!.
     speak('請問要查詢哪裡的天氣');
+  }else{
+    speak('can speak not');
   }
   
 }
