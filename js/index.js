@@ -98,7 +98,9 @@
 // });
 
 function myclick(){
-  speak('請問要查詢哪裡的天氣');
+  //speak('請問要查詢哪裡的天氣');
+  var msg = new SpeechSynthesisUtterance('世界你好！');
+  window.speechSynthesis.speak(msg);
 }
 
 function speak(str) {
