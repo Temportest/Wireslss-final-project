@@ -87,15 +87,6 @@ function call() {
 }
 
 
-boardReady({ device: 'nWxRb' }, function (board) {
-  board.systemReset();
-  board.samplingInterval = 250;
-  console.log('光敏初始化中gdfl...ds');
-  speak('123', ["zh-TW", 1, 1, 1], function () {
-
-  }, 0);
-});
-
 // function myclick(){
 //   // if ('speechSynthesis' in window) {
 //   //   // Synthesis support. Make your web apps talk!.
