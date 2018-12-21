@@ -20,3 +20,8 @@ function speak(str) {
 }
 
 ```
+
+
+
+Google location API
+https://maps.googleapis.com/maps/api/geocode/json?latlng=22.9926949,120.2155742&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU
