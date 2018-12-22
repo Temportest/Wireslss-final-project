@@ -38,3 +38,5 @@ let zhText='請問您要查詢哪裡的天氣';
 
 - [baidu API](http://api.map.baidu.com/geocoder?output=json&location=22.9926949,120.2155742&ak=esNPFDwwsXWtsQfw4NMNmur1
 )
+
+-[Google tran API blog](https://note.pcwu.net/2017/02/08/tts-api/)
