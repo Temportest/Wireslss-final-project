@@ -97,9 +97,21 @@ function voiceEndCallback() {
   };
   window._recognition.start();
 }
+function voiceStartCallback() {
+  console.log("Voice started");
+}
 
+function voiceEndCallback() {
+  console.log("Voice ended");
+}
 function call() {
-  responsiveVoice.speak("請問您要查詢哪裡的天氣", "Chinese Taiwan Male", { onend: voiceEndCallback });
+  //responsiveVoice.speak("請問您要查詢哪裡的天氣", "Chinese Taiwan Male", { onend: voiceEndCallback });
+  var parameters = {
+    onstart: voiceStartCallback,
+    onend: voiceEndCallback
+  }
+
+  responsiveVoice.speak("Hello, this is a test using callbacks", "UK English Female", parameters);
 }
 
 
