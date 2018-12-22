@@ -117,7 +117,6 @@ function call() {
   // }
   
 }
-document.write(`<audio controls autoplay src=""></audio>`);
 
 function getLocation(){
   // let longitude, latitude; // 經緯度
