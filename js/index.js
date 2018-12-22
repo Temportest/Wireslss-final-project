@@ -68,81 +68,64 @@ if (!("webkitSpeechRecognition" in window)) {
   };
 }
 
-function call() {
-  speak('請問您要查詢哪裡的天氣', ["zh-TW", 1, 1, 1], function () {
-    document.getElementById("status").innerHTML = '連接成功[語音辨識]';
-    // 開始語音辨識
-    window._recognition.onresult = function (event, result) {
-      result = {};
-      result.resultLength = event.results.length - 1;
-      result.resultTranscript = event.results[result.resultLength][0].transcript;
-      if (event.results[result.resultLength].isFinal === true) {
-        console.log(result.resultTranscript);
-        if (result.resultTranscript.indexOf("目前") !== -1) {
-          speak('搜尋中請稍候', ["zh-TW", 1, 1, 1], function () {
-            window._recognition.status = false;
-            window._recognition.stop();
-            //搜尋延遲等待
-            setTimeout(function () { 
-              speak('目前天氣晴', ["zh-TW", 1, 1, 1], function () {
-                onStart(); // 開始偵測光敏
-              }, 0);
-            }, 3000);
-          }, 0);
-          console.log(event.results[result.resultLength]);
-        }
-        console.log("final");
-      } else if (event.results[result.resultLength].isFinal === false) {
+function voiceEndCallback() {
+  document.getElementById("status").innerHTML = '連接成功[語音辨識]';
+  // 開始語音辨識
+  window._recognition.onresult = function (event, result) {
+    result = {};
+    result.resultLength = event.results.length - 1;
+    result.resultTranscript = event.results[result.resultLength][0].transcript;
+    if (event.results[result.resultLength].isFinal === true) {
+      console.log(result.resultTranscript);
+      if (result.resultTranscript.indexOf("目前") !== -1) {
+        speak('搜尋中請稍候', ["zh-TW", 1, 1, 1], function () {
+          window._recognition.status = false;
+          window._recognition.stop();
+          //搜尋延遲等待
+          setTimeout(function () {
+            getLocation();
+            speak('目前天氣晴', ["zh-TW", 1, 1, 1], function () {
+              onStart(); // 開始偵測光敏
+            }, 0);
+          }, 3000);
+        }, 0);
+        console.log(event.results[result.resultLength]);
       }
-    };
-    window._recognition.start();
-  }, 0)
+      console.log("final");
+    } else if (event.results[result.resultLength].isFinal === false) {
+    }
+  };
+  window._recognition.start();
+}
+
+function call() {
+  responsiveVoice.speak("請問您要查詢哪裡的天氣", "Chinese Taiwan Male", { onend: voiceEndCallback });
 }
 
 
-// function myclick(){
-//   // if ('speechSynthesis' in window) {
-//   //   // Synthesis support. Make your web apps talk!.
-//   //   speak('請問要查詢哪裡的天氣');
-//   // }else{
-    
-//   // }
-//   speak('can speak not');
-// }
-
-// function speak(str) {
-//   var msg = new SpeechSynthesisUtterance();
-//   var voices = window.speechSynthesis.getVoices();
-//   // msg.voice = voices[10]; // Note: some voices don't support altering params
-//   msg.voiceURI = 'native';
-//   msg.volume = 1; // 0 to 1
-//   msg.rate = 1; // 0.1 to 10
-//   msg.pitch = 1; //0 to 2
-//   msg.text = str;
-//   msg.lang = 'zh-TW';
-
-//   console.log('dsfds');
-//   window.speechSynthesis.speak(msg);
-// }
+function getLocation(){
+  // let longitude, latitude; // 經緯度
+  // // JS 取得經緯度
+  // if (navigator.geolocation) {
+  //   navigator.geolocation.getCurrentPosition(function (res) {
+  //     longitude = res.coords.longitude
+  //     latitude = res.coords.latitude;
+  //   }, function (error) {
+  //     console.log(error);
+  //   });
+  // } else {
+  //   console.log("Geolocation is not supported by this browser.");
+  // }
+  // // Google GeoCode API 經緯度取得地址
+  // $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`, function (data) {
+  //   console.log(JSON.stringify(data, null, 2));
+  // });
+  // var val = document.getElementById("val").value;
+  // var zhText = val;
+  // zhText = encodeURI(zhText);
+  
+}
 
 
 
-//取得你目前位置
-var geocoder = new google.maps.Geocoder();
 
-// google.maps.LatLng 物件
-var coord = new google.maps.LatLng(25.0439892, 121.5212213);
-
-// 傳入 latLng 資訊至 geocoder.geocode
-geocoder.geocode({ 'latLng': coord }, function (results, status) {
-  if (status === google.maps.GeocoderStatus.OK) {
-    // 如果有資料就會回傳
-    if (results) {
-      console.log(results[0]);
-    }
-  }
-  // 經緯度資訊錯誤
-  else {
-    alert("Reverse Geocoding failed because: " + status);
-  }
-});

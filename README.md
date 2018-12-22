@@ -21,6 +21,15 @@ function speak(str) {
 
 ```
 
+## 百度TTS
+```js
+let zhText='請問您要查詢哪裡的天氣';
+  document.write("<audio autoplay=\"autoplay\">");
+  document.write("<source src=\"http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=2&text=" + zhText + "\" type=\"audio/mpeg\">");
+  document.write("<embed height=\"0\" width=\"0\" src=\"http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=2&text=" + zhText + "\">");
+  document.write("</audio>");
+```
+
 
 
 - [Geocoding API ](https://maps.googleapis.com/maps/api/geocode/json?latlng=22.9926949,120.2155742&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU)
