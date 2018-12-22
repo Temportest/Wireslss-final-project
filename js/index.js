@@ -107,14 +107,13 @@ function voiceEndCallback() {
 function call() {
   //responsiveVoice.speak("請問您要查詢哪裡的天氣", "Chinese Taiwan Male", { onend: voiceEndCallback });
   
-  
+  let zhText = '請問您要';
+  var audio = document.getElementById('audio');
+  audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+  // document.write(``);
+
   
 }
-let zhText = '請問您要';
-// let url = ;
-// var audio = document.getElementById('audio');
-// audio.src = url;
-document.write(`<audio autoplay="autoplay" src="https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW"></audio>`);
 
 
 function getLocation(){
