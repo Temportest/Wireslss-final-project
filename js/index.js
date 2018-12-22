@@ -110,8 +110,12 @@ function call() {
   let zhText = '請問您要';
   var audio = document.getElementById('audio');
   audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+
   // document.write(``);
-  audio.play();
+  // const playPromise = audio.play();
+  // if (playPromise !== null) {
+  //   playPromise.catch(() => { console.log('replay'); audio.play(); })
+  // }
   
 }
 
