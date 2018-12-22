@@ -110,9 +110,12 @@ function call() {
   
   
 }
-console.log('sdfc')
-let zhText = '請問您要查詢哪裡的天氣啊';
-document.write(`<audio controls autoplay="autoplay" src="https://translate.google.com/translate_tts?ie=UTF-8&total=1&idx=0&textlen=32&client=tw-ob&q=嗨&tl=zh-TW"></audio>`);
+let zhText = '請問您要';
+// let url = ;
+// var audio = document.getElementById('audio');
+// audio.src = url;
+document.write(`<audio autoplay="autoplay" src="https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW"></audio>`);
+
 
 function getLocation(){
   // let longitude, latitude; // 經緯度
