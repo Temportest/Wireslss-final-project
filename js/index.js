@@ -97,24 +97,19 @@ function voiceEndCallback() {
   };
   window._recognition.start();
 }
-function voiceStartCallback() {
-  console.log("Voice started");
-}
 
-function voiceEndCallback() {
-  console.log("Voice ended");
-}
 function call() {
   //responsiveVoice.speak("請問您要查詢哪裡的天氣", "Chinese Taiwan Male", { onend: voiceEndCallback });
   
   let zhText = '請問您要';
   var audio = document.getElementById('audio');
   //audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
-  audio.src ="../audio/siri_begin.mp3";
+  audio.src ="/audio/siri_begin.mp3";
   setTimeout(function () {
     console.log('resta')
+    voiceEndCallback();
     onStart();
-  }, 3000);
+  }, 1000);
   // document.write(``);
   // const playPromise = audio.play();
   // if (playPromise !== null) {
