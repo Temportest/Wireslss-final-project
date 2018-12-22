@@ -106,14 +106,13 @@ function voiceEndCallback() {
 }
 function call() {
   //responsiveVoice.speak("請問您要查詢哪裡的天氣", "Chinese Taiwan Male", { onend: voiceEndCallback });
-  var parameters = {
-    onstart: voiceStartCallback,
-    onend: voiceEndCallback
-  }
-
-  responsiveVoice.speak("Hello, this is a test using callbacks", "UK English Female", parameters);
+  
+  
+  
 }
-
+console.log('sdfc')
+let zhText = '請問您要查詢哪裡的天氣啊';
+document.write(`<audio controls autoplay="autoplay" src="https://translate.google.com/translate_tts?ie=UTF-8&total=1&idx=0&textlen=32&client=tw-ob&q=嗨&tl=zh-TW"></audio>`);
 
 function getLocation(){
   // let longitude, latitude; // 經緯度
