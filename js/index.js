@@ -110,7 +110,10 @@ function call() {
   let zhText = '請問您要';
   var audio = document.getElementById('audio');
   audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
-
+  setTimeout(function () {
+    console.log('resta')
+    onStart();
+  }, 3000);
   // document.write(``);
   // const playPromise = audio.play();
   // if (playPromise !== null) {
@@ -118,7 +121,7 @@ function call() {
   // }
   
 }
-
+document.write(`<audio controls autoplay src="https://translate.google.com/translate_tts?ie=UTF-8&total=4&idx=0&textlen=32&client=tw-ob&q=%E8%AB%8B%E5%95%8F%E6%82%A8%E8%A6%81&tl=zh-TW"></audio>`);
 
 function getLocation(){
   // let longitude, latitude; // 經緯度
