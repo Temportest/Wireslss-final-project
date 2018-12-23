@@ -309,7 +309,7 @@ function getLocation() {
 				//console.log(longitude + " " + latitude);
 				// Google GeoCode API 經緯度取得地址
 				$.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`, function (data) {
-					//console.log(JSON.stringify(data, null, 2));
+					console.log(JSON.stringify(data, null, 2));
 					//return JSON.stringify(data, null, 2);
 					resolve(Object.assign(data, null, 2));
 				});
@@ -497,10 +497,11 @@ function getNowGEOWeatherData() {
 		}
 	], function (err, addressData, weatherData) {
 		// 取得地址和天氣資訊
-		console.log(addressData);
-		console.log(weatherData);
 		showCondition();
-		speakTTS('目前台南市天氣晴最高溫36度最低溫18度');
+			const addressComponents = addressData.results[0].address_components.length;
+			const city = addressData.results[0].address_components[addressComponents-3].long_name;
+			const direct = addressData.results[0].address_components[addressComponents - 4].long_name;
+			speakTTS(`目前位置為 ${city}${direct}. ${weatherData.currently.summary} 最高溫 ${weatherData.daily.data[0].temperatureMax}度 最低溫 ${weatherData.daily.data[0].temperatureMin}度`);
 		onStart();
 	});
 
