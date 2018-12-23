@@ -40,7 +40,8 @@ $(document).ready(function () {
 	function yourAddress() {
 		var googleApiCall = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU&language=zh-TW`;
 		$.getJSON(googleApiCall, function (locationName) {
-			$(".locName").html(locationName.results[1].formatted_address);
+			console.log(locationName.results);
+			$(".locName").html(locationName.results[2].formatted_address);
 			// console.log(locationName.results[2].formatted_address); (For checking the precision)
 		});
 	}
