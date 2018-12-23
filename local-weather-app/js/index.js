@@ -22,41 +22,19 @@ $(document).ready(function () {
 	};
 
 	function locateYou() {
-		// //Try to get users location using their IP adress automattically.
-		// //It's not very precise but It's a way to get users location even if
-		// //their browser doesn't support Geolocation or if they refuse to share it.
-		// var ipApiCall = "https://ipapi.co/json";
-		// $.getJSON(ipApiCall, function(ipData){
-		// 	lat = ipData.latitude;
-		// 	lon = ipData.longitude;
-		// 	//console.log(lat+" "+lon+"ip"); (For Debugginh)
-		let longitude, latitude; // 經緯度
-		// JS 取得經緯度
+		//Try to get location from users browser (device).
 		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function (res) {
-				lon = res.coords.longitude
-				lat = res.coords.latitude;
-			}, function (error) {
-				console.log(error);
+			navigator.geolocation.getCurrentPosition(function (position) {
+				lat = position.coords.latitude;
+				lon = position.coords.longitude;
+				// console.log(lat+" "+lon+"geo"); (For Debugging)
+				yourAddress();
+				getWeather();
 			});
-		} else {
-			console.log("Geolocation is not supported by this browser.");
 		}
-		yourAddress();
-		getWeather();
 	};
 
-	//Try to get location from users browser (device).
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(function (position) {
-			lat = position.coords.latitude;
-			lon = position.coords.longitude;
-			// console.log(lat+" "+lon+"geo"); (For Debugging)
-			yourAddress();
-			getWeather();
-		});
-	}
-}
+	
 
 	//After collecting the Latiture and Longitute, Getting their formatted address from Google Maps.
 	function yourAddress() {
