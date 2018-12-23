@@ -97,7 +97,6 @@ function startRecognize() {
   setTimeout(function () {
     console.log('resta')
     voiceEndCallback();
-    onStart();
   }, 1000);
   // document.write(``);
   // const playPromise = audio.play();
@@ -107,26 +106,30 @@ function startRecognize() {
 }
 
 // 取得目前經緯度和地址
-function getLocation() {
-  let longitude, latitude; // 經緯度
-  // JS 取得經緯度
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (res) {
-      longitude = res.coords.longitude
-      latitude = res.coords.latitude;
-      console.log(longitude + " " + latitude);
-      // Google GeoCode API 經緯度取得地址
-      $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`, function (data) {
-        console.log(JSON.stringify(data, null, 2));
+function getLocation(){
+  return new Promise(function (resolve, reject) {
+    let longitude, latitude; // 經緯度
+    // JS 取得經緯度
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (res) {
+        longitude = res.coords.longitude
+        latitude = res.coords.latitude;
+        //console.log(longitude + " " + latitude);
+        // Google GeoCode API 經緯度取得地址
+        $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`, function (data) {
+          //console.log(JSON.stringify(data, null, 2));
+          //return JSON.stringify(data, null, 2);
+          resolve(JSON.stringify(data, null, 2));
+        });
+      }, function (error) {
+        console.log(error);
       });
-    }, function (error) {
-      console.log(error);
-    });
-  } else {
-    console.log("Geolocation is not supported by this browser.");
-  }
-
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  })
 }
+
 
 
 // 取得縣市經緯度
@@ -236,15 +239,41 @@ function parseCity(city) {
 // 取得天氣資料
 function getData(longitude, latitude) {
   console.log(longitude + " " + latitude);
-  speak('搜尋中請稍候', ["zh-TW", 1, 1, 1], function () {
-    window._recognition.status = false;
-    window._recognition.stop();
-    //搜尋延遲等待
-    setTimeout(function () {
-      getLocation();
-      speak('目前天氣晴', ["zh-TW", 1, 1, 1], function () {
-        onStart(); // 開始偵測光敏
-      }, 0);
-    }, 2000);
-  }, 0);
+  // speak('搜尋中請稍候', ["zh-TW", 1, 1, 1], function () {
+  //   window._recognition.status = false;
+  //   window._recognition.stop();
+  //   //搜尋延遲等待
+  //   setTimeout(function () {
+  //     getLocation();
+  //     speak('目前天氣晴', ["zh-TW", 1, 1, 1], function () {
+  //       onStart(); // 開始偵測光敏
+  //     }, 0);
+  //   }, 2000);
+  // }, 0);
+  async.waterfall([
+    function (callback) {
+      const zhText = '搜尋中請稍候';
+      const audio = document.getElementById('audio');
+      console.log(audio);
+      audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+      callback(null);
+    },
+    function (callback) {
+      // arg1 now equals 'one' and arg2 now equals 'two'
+      getLocation().then((data) => {
+        // Google API取得目前地址
+        console.log(data);
+      });
+      callback(null, 'three');
+    },
+    function (arg1, callback) {
+      // arg1 now equals 'three'
+      callback(null, 'done');
+    }
+  ], function (err, result) {
+    // result now equals 'done'
+  });
+
 }
+
+
