@@ -1,6 +1,6 @@
 //Variables for working with Location, Temprature and Times
 var latitude;
-	var lon;
+var longitude;
 	var tempInF;
 	var tempInC;
 	var timeFormatted;
@@ -24,8 +24,8 @@ var latitude;
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function (position) {
 				latitude = position.coords.latitude;
-				lon = position.coords.longitude;
-				console.log(lat + " " + lon + "geo");
+				longitude = position.coords.longitude;
+				console.log(latitude + " " + longitude + "geo");
 				// yourAddress();
 				// getWeather();
 			});
@@ -33,20 +33,20 @@ var latitude;
 	};
 
 	//After collecting the Latiture and Longitute, Getting their formatted address from Google Maps.
-	function yourAddress() {
-		var googleApiCall = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU&language=zh-TW`;
-		$.getJSON(googleApiCall, function (locationName) {
-			console.log(locationName.results);
-			$(".locName").html(locationName.results[4].formatted_address);
-			// console.log(locationName.results[2].formatted_address); (For checking the precision)
-		});
-	}
+	// function yourAddress() {
+	// 	var googleApiCall = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU&language=zh-TW`;
+	// 	$.getJSON(googleApiCall, function (locationName) {
+	// 		console.log(locationName.results);
+	// 		$(".locName").html(locationName.results[4].formatted_address);
+	// 		// console.log(locationName.results[2].formatted_address); (For checking the precision)
+	// 	});
+	// }
 
 	function getWeather() {
 		//Looking up the weather from Darkskies using users latitude and longitude.
 		//Please don't use this API key. Get your own from DarkSkies.
 		var weatherApiKey = "a3219d4e2772db6e34c6491e62144b27";
-		var weatherApiCall = "https://api.darksky.net/forecast/" + weatherApiKey + "/" + lat + "," + lon +"?units=si&lang=zh-tw";
+		var weatherApiCall = "https://api.darksky.net/forecast/" + weatherApiKey + "/" + latitude + "," + longitude +"?units=si&lang=zh-tw";
 		$.ajax({
 			url: weatherApiCall,
 			type: "GET",
@@ -145,7 +145,7 @@ var latitude;
 	}
 
 	//Calling the function to locate user and fetch the data
-	locateYou();
+	//locateYou();
 
 	//Function for converting UNIX time to Local Time
 	function unixToTime(unix) {
@@ -193,7 +193,7 @@ var latitude;
 
 
 
-function show(){
+function showCondition(){
 	//Initiate wow.js
 	new WOW().init();
 	const weatherSection = document.getElementById('weather-section');
@@ -310,10 +310,10 @@ function startRecognize() {
 // 取得目前經緯度和地址
 function getLocation() {
 	return new Promise(function (resolve, reject) {
-		let longitude, latitude; // 經緯度
 		// JS 取得經緯度
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function (res) {
+				// 放置全域變數中
 				longitude = res.coords.longitude
 				latitude = res.coords.latitude;
 				//console.log(longitude + " " + latitude);
@@ -321,7 +321,7 @@ function getLocation() {
 				$.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`, function (data) {
 					//console.log(JSON.stringify(data, null, 2));
 					//return JSON.stringify(data, null, 2);
-					resolve(JSON.stringify(data, null, 2));
+					resolve(Object.assign(data, null, 2));
 				});
 			}, function (error) {
 				console.log(error);
@@ -486,16 +486,18 @@ function getNowGEOWeatherData() {
 			callback(null);
 		},
 		function (callback) {
-			// arg1 now equals 'one' and arg2 now equals 'two'
+			// Google API取得目前地址
 			getLocation().then((data) => {
-				// Google API取得目前地址
+				// 前端渲染地址
+				console.log(data.results);
+				$(".locName").html(data.results[4].formatted_address);
 				callback(null, data);
 			});
 
 		},
 		function (arg1, callback) {
 			// arg1 now equals 'three'
-			console.log(arg1);
+			getWeather();
 			callback(null, 'done now location weather');
 		}
 	], function (err, result) {
