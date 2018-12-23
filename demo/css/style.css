@@ -476,9 +476,3 @@ transition: background-image 1.5s linear;
     width: 50%;
   }
 }
-
-/* 語音偵測 */
-.typing{
-  font-size: 20px;
-  color: white;
-}
