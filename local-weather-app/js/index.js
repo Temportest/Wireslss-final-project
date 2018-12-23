@@ -27,7 +27,7 @@ $(document).ready(function () {
 			navigator.geolocation.getCurrentPosition(function (position) {
 				lat = position.coords.latitude;
 				lon = position.coords.longitude;
-				// console.log(lat+" "+lon+"geo"); (For Debugging)
+				console.log(lat+" "+lon+"geo"); 
 				yourAddress();
 				getWeather();
 			});
@@ -38,7 +38,7 @@ $(document).ready(function () {
 
 	//After collecting the Latiture and Longitute, Getting their formatted address from Google Maps.
 	function yourAddress() {
-		var googleApiCall = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`;
+		var googleApiCall = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU&language=zh-TW`;
 		$.getJSON(googleApiCall, function (locationName) {
 			$(".locName").html(locationName.results[2].formatted_address);
 			// console.log(locationName.results[2].formatted_address); (For checking the precision)
