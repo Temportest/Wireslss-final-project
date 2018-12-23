@@ -20,16 +20,21 @@ var weatherQuotes = {
 };
 
 function locateYou() {
-	//Try to get location from users browser (device).
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(function (position) {
-			latitude = position.coords.latitude;
-			longitude = position.coords.longitude;
-			console.log(latitude + " " + longitude + "geo");
-			// yourAddress();
-			// getWeather();
-		});
-	}
+	return new Promise(function (resolve, reject) {
+		// 經緯度取得縣市地區資訊
+		//Try to get location from users browser (device).
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function (position) {
+				latitude = position.coords.latitude;
+				longitude = position.coords.longitude;
+				console.log(latitude + " " + longitude + "geo");
+				resolve();
+			});
+			
+		}
+	}, function (error) {
+		console.log(error);
+	});
 };
 
 //After collecting the Latiture and Longitute, Getting their formatted address from Google Maps.
@@ -288,11 +293,9 @@ function voiceEndCallback() {
 
 // 觸發語音監聽事件
 function startRecognize() {
-	let zhText = '請問您要';
 	var audio = document.getElementById('audio');
 	audio.src = "https://temporatry.github.io/Wireslss-final-project/audio/siri_begin.mp3";
 	setTimeout(function () {
-		console.log('resta')
 		voiceEndCallback();
 	}, 1000);
 }
@@ -300,26 +303,15 @@ function startRecognize() {
 // 取得目前經緯度和地址
 function getLocation() {
 	return new Promise(function (resolve, reject) {
-		// JS 取得經緯度
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function (res) {
-				// 放置全域變數中
-				longitude = res.coords.longitude
-				latitude = res.coords.latitude;
-				//console.log(longitude + " " + latitude);
-				// Google GeoCode API 經緯度取得地址
-				$.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`, function (data) {
-					console.log(JSON.stringify(data, null, 2));
-					//return JSON.stringify(data, null, 2);
-					resolve(Object.assign(data, null, 2));
-				});
-			}, function (error) {
-				console.log(error);
-			});
-		} else {
-			console.log("Geolocation is not supported by this browser.");
-		}
-	})
+		// 經緯度取得縣市地區資訊
+		$.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`, function (data) {
+			console.log(JSON.stringify(data, null, 2));
+			//return JSON.stringify(data, null, 2);
+			resolve(Object.assign(data, null, 2));
+		});
+	}, function (error) {
+		console.log(error);
+	});
 }
 
 
@@ -327,102 +319,102 @@ function getLocation() {
 // 取得縣市經緯度
 function parseCity(city) {
 	if (city.indexOf('台北') !== -1) {
-		getCityWeatherData(121.5598, 25.09108);
+		getCityWeatherData(121.5598, 25.09108, '台北');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('新北') !== -1) {
-		getCityWeatherData(121.6739, 24.91571);
+		getCityWeatherData(121.6739, 24.91571, '新北');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('宜蘭') !== -1) {
-		getCityWeatherData(121.7195, 24.69295);
+		getCityWeatherData(121.7195, 24.69295, '宜蘭');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('花蓮') !== -1) {
-		getCityWeatherData(121.3542, 23.7569);
+		getCityWeatherData(121.3542, 23.7569, '花蓮');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('金門') !== -1) {
-		getCityWeatherData(118.3186, 24.43679);
+		getCityWeatherData(118.320213, 24.433040,  '金門');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('南投') !== -1) {
-		getCityWeatherData(120.9876, 23.83876);
+		getCityWeatherData(120.9876, 23.83876, '南投');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('屏東') !== -1) {
-		getCityWeatherData(120.62, 22.54951);
+		getCityWeatherData(120.62, 22.54951, '屏東');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('苗栗') !== -1) {
-		getCityWeatherData(120.9417, 24.48927);
+		getCityWeatherData(120.9417, 24.48927, '苗栗');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('桃園') !== -1) {
-		getCityWeatherData(121.2168, 24.93759);
+		getCityWeatherData(121.2168, 24.93759, '桃園');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('高雄') !== -1) {
-		getCityWeatherData(120.666, 23.01087);
+		getCityWeatherData(120.666, 23.01087, '高雄');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('基隆') !== -1) {
-		getCityWeatherData(121.7081, 25.10898);
+		getCityWeatherData(121.7081, 25.10898, '基隆');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('連江') !== -1) {
-		getCityWeatherData(119.5397, 26.19737);
+		getCityWeatherData(119.5397, 26.19737, '連江');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('雲林') !== -1) {
-		getCityWeatherData(120.3897, 23.75585);
+		getCityWeatherData(120.3897, 23.75585, '雲林');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('嘉義') !== -1) {
-		getCityWeatherData(120.574, 23.45889);
+		getCityWeatherData(120.574, 23.45889, '嘉義');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('新竹') !== -1) {
-		getCityWeatherData(121.1252, 24.70328);
+		getCityWeatherData(121.1252, 24.70328, '新竹');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('彰化') !== -1) {
-		getCityWeatherData(120.4818, 23.99297);
+		getCityWeatherData(120.4818, 23.99297, '彰化');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('臺中') !== -1) {
-		getCityWeatherData(120.9417, 24.23321);
+		getCityWeatherData(120.9417, 24.23321, '臺中');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('台東') !== -1) {
-		getCityWeatherData(120.9876, 22.98461);
+		getCityWeatherData(120.9876, 22.98461, '台東');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('台南') !== -1) {
-		getCityWeatherData(120.2513, 23.1417);
+		getCityWeatherData(120.2513, 23.1417, '台南');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
 	else if (city.indexOf('澎湖') !== -1) {
-		getCityWeatherData(119.6151, 23.56548);
+		getCityWeatherData(119.6151, 23.56548, '澎湖');
 		window._recognition.status = false;
 		window._recognition.stop();
 	} else if (city.indexOf('目前') !== -1) {
@@ -433,28 +425,42 @@ function parseCity(city) {
 }
 
 // 縣市名稱取得天氣資料
-function getCityWeatherData(longitude, latitude) {
-	console.log(longitude + " " + latitude);
+function getCityWeatherData(lng, lat, city) {
 	async.waterfall([
 		function (callback) {
-			// const zhText = '搜尋中請稍候';
-			// const audio = document.getElementById('audio');
-			// console.log(audio);
-			// audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
 			speakTTS('搜尋中請稍候');
-			callback(null);
+			setTimeout(() => {
+				// 為了解決延遲與同步故語音播報後等待三秒再進入下一階段
+				callback(null);
+			}, 3000);
 		},
 		function (callback) {
-			// 直接縣市經緯度搜尋天氣
-			callback(null, 'done city weather');
+			// 將經緯度更新為該縣市
+			latitude = lat;
+			longitude = lng;
+			console.log(lat + " "+lng);
+			// Google API取得目前地址
+			getLocation().then((data) => {
+				// 取得縣市名稱
+				const addressComponents = data.results[2].address_components.length;
+				const city = data.results[2].address_components[addressComponents - 3].long_name;
+				// 前端渲染地址
+				$(".locName").html(`台灣 ${city}`);
+				callback(null, data);
+			});
+		},
+		function (addressData, callback) {
+			// 取得地址
+			getWeather().then(function (weatherData) {
+				callback(null, addressData, weatherData);
+			});
 		}
-	], function (err, result) {
-		// result now equals 'done'
-		console.log(result);
-		setTimeout(() => {
-			showCondition();
-			speakTTS('目前天氣晴最高溫三十度');
-		}, 4000);
+	], function (err, addressData, weatherData) {
+		// 取得地址和天氣資訊
+		showCondition();
+		const addressComponents = addressData.results[2].address_components.length;
+		const city = addressData.results[2].address_components[addressComponents - 3].long_name;
+			speakTTS(`您查詢的縣市為 ${city}. 最高溫 ${Math.round(weatherData.daily.data[0].temperatureMax)}度 最低溫 ${Math.round(weatherData.daily.data[0].temperatureMin)}度`);
 		onStart();
 	});
 
@@ -470,7 +476,6 @@ function speakTTS(text) {
 }
 // 目前位置的天氣資料
 function getNowGEOWeatherData() {
-	console.log('getNowGEOWeatherData');
 	async.waterfall([
 		function (callback) {
 			speakTTS('搜尋中請稍候');
@@ -478,6 +483,12 @@ function getNowGEOWeatherData() {
 				// 為了解決延遲與同步故語音播報後等待三秒再進入下一階段
 				callback(null);
 			}, 3000);
+		},
+		function (callback) {
+			// 取得使用者經緯度
+			locateYou().then(function(){
+				callback(null);
+			});
 		},
 		function (callback) {
 			// Google API取得目前地址
@@ -491,17 +502,16 @@ function getNowGEOWeatherData() {
 		function (addressData, callback) {
 			// 取得地址
 			getWeather().then(function (weatherData) {
-				const result = { addressData, weatherData };
 				callback(null, addressData, weatherData);
 			});
 		}
 	], function (err, addressData, weatherData) {
 		// 取得地址和天氣資訊
 		showCondition();
-			const addressComponents = addressData.results[0].address_components.length;
-			const city = addressData.results[0].address_components[addressComponents-3].long_name;
-			const direct = addressData.results[0].address_components[addressComponents - 4].long_name;
-			speakTTS(`目前位置為 ${city}${direct}. ${weatherData.currently.summary} 最高溫 ${Math.round(weatherData.daily.data[0].temperatureMax)}度 最低溫 ${Math.round(weatherData.daily.data[0].temperatureMin)}度`);
+		const addressComponents = addressData.results[4].address_components.length;
+		const city = addressData.results[4].address_components[addressComponents - 3].long_name;
+		const direct = addressData.results[4].address_components[addressComponents - 4].long_name;
+		speakTTS(`目前位置為 ${city}${direct}. ${weatherData.currently.summary} 最高溫 ${Math.round(weatherData.daily.data[0].temperatureMax)}度 最低溫 ${Math.round(weatherData.daily.data[0].temperatureMin)}度`);
 		onStart();
 	});
 
