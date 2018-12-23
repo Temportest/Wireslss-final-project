@@ -40,3 +40,6 @@ let zhText='請問您要查詢哪裡的天氣';
 )
 
 -[Google tran API blog](https://note.pcwu.net/2017/02/08/tts-api/)
+
+
+- [天氣查詢](https://temporatry.github.io/Wireslss-final-project/local-weather-app/index.html)

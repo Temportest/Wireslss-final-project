@@ -501,7 +501,7 @@ function getNowGEOWeatherData() {
 			const addressComponents = addressData.results[0].address_components.length;
 			const city = addressData.results[0].address_components[addressComponents-3].long_name;
 			const direct = addressData.results[0].address_components[addressComponents - 4].long_name;
-			speakTTS(`目前位置為 ${city}${direct}. ${weatherData.currently.summary} 最高溫 ${weatherData.daily.data[0].temperatureMax}度 最低溫 ${weatherData.daily.data[0].temperatureMin}度`);
+			speakTTS(`目前位置為 ${city}${direct}. ${weatherData.currently.summary} 最高溫 ${Math.round(weatherData.daily.data[0].temperatureMax)}度 最低溫 ${Math.round(weatherData.daily.data[0].temperatureMin)}度`);
 		onStart();
 	});
 
