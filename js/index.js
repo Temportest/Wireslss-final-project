@@ -92,17 +92,11 @@ function voiceEndCallback() {
 function startRecognize() {
   let zhText = '請問您要';
   var audio = document.getElementById('audio');
-  //audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
   audio.src = "audio/siri_begin.mp3";
   setTimeout(function () {
     console.log('resta')
     voiceEndCallback();
   }, 1000);
-  // document.write(``);
-  // const playPromise = audio.play();
-  // if (playPromise !== null) {
-  //   playPromise.catch(() => { console.log('replay'); audio.play(); })
-  // }
 }
 
 // 取得目前經緯度和地址
@@ -245,10 +239,11 @@ function getCityWeatherData(longitude, latitude) {
   console.log(longitude + " " + latitude);
   async.waterfall([
     function (callback) {
-      const zhText = '搜尋中請稍候';
-      const audio = document.getElementById('audio');
-      console.log(audio);
-      audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+      // const zhText = '搜尋中請稍候';
+      // const audio = document.getElementById('audio');
+      // console.log(audio);
+      // audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+      speakTTS('搜尋中請稍候');
       callback(null);
     },
     function (callback) {
@@ -259,24 +254,29 @@ function getCityWeatherData(longitude, latitude) {
     // result now equals 'done'
     console.log(result);
     setTimeout(() => {
-      const zhText = '目前天氣晴最高溫30度最低溫18度';
-      const audio = document.getElementById('audio');
-      console.log(audio);
-      audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+      speakTTS('目前天氣晴最高溫三十度');
     }, 4000);
     onStart();
   });
 
 }
 
+function speakTTS(text) {
+  var resAudio = document.createElement('audio');
+  resAudio.id = 'resAudio';
+  resAudio.src = `http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&per=1&text=${text}`;
+  resAudio.autoplay = 'true';
+  document.body.appendChild(resAudio);
+}
 // 目前位置的天氣資料
 function getNowGEOWeatherData() {
   async.waterfall([
     function (callback) {
-      const zhText = '搜尋中請稍候';
-      const audio = document.getElementById('audio');
-      console.log(audio);
-      audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+      // const zhText = '搜尋中請稍候';
+      // const audio = document.getElementById('audio');
+      // console.log(audio);
+      // audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+      speakTTS('搜尋中請稍候');
       callback(null);
     },
     function (callback) {
@@ -285,7 +285,7 @@ function getNowGEOWeatherData() {
         // Google API取得目前地址
         callback(null, data);
       });
-      
+
     },
     function (arg1, callback) {
       // arg1 now equals 'three'
@@ -295,10 +295,7 @@ function getNowGEOWeatherData() {
   ], function (err, result) {
     // result now equals 'done'
     console.log(result);
-      const zhText = '目前台南市天氣晴最高溫36度最低溫18度';
-      const audio = document.getElementById('audio');
-      console.log(audio);
-      audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+    speakTTS('目前台南市天氣晴最高溫36度最低溫18度');
     onStart();
   });
 
