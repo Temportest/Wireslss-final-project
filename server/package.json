@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "nyc mocha --timeout 1000",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
+  }
+}
