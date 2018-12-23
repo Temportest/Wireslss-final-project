@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <title>Ｗireless Final Project</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'>
   <link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.css'>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css'>
 
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/duinoStyle.css">
 
 
 </head>
@@ -20,21 +20,25 @@
   <div class="background" id="background-img"></div>
   <button onclick="show()"></button>
   <section class="status-container" id="status-section">
-
+    <div><span id="status">尚未連接</span></div>
+    <div><span id="demo-area-01-show">version6</span></div>
+    <div><span id="demo-area-02-show">溫濕度</span></div>
+    <div><span id="area-show">地區</span></div>
+    <iframe src="" allow="autoplay" id="audio" class="audio-frame"></iframe>
   </section>
 
   <section class="weather-section" id="weather-section">
     <section id="dailyForecast" class="dailyForecast">
       <div class="container">
-    
+
         <div class="row justify-content-center searchBar">
           <div class="col-10 col-lg-8">
             <input type="text" name="locSearchBox" id="locSearchBox">
           </div>
         </div>
-    
+
         <div class="row justify-content-around">
-    
+
           <div class="col-10 col-lg-5 tempBox text-center">
             <i class="icon ion-location"></i>
             <p><span class="locName">Your Location Here</span></p>
@@ -56,9 +60,9 @@
               </div>
             </div>
           </div>
-    
+
           <div class="col-12 col-sm-12 col-md-10 col-lg-7 col-xl-6 dashboard text-center">
-    
+
             <div class="row justify-content-center dashboardDaily">
               <div class="col-3 tempMaxBox">
                 <p><i class="icon ion-arrow-graph-up-left"></i><br>
@@ -75,7 +79,7 @@
                 </p>
               </div>
             </div>
-    
+
             <div class="row sunTimes justify-content-center">
               <div class="col sunrise">
                 <p><i class="wi wi-sunrise"></i> <span class="sunriseTime"></span></p>
@@ -90,26 +94,26 @@
                 <p><i class="wi wi-raindrop"></i> <span class="dewPoint"></span></p>
               </div>
             </div>
-    
+
             <div class="row weatherQuote text-center">
               <div class="col">
                 <p class="quote">"There is no such thing as bad weather, only different kinds of good weather." -John
                   Ruskin</p>
               </div>
             </div>
-    
+
             <div class="row justify-content-center weeklyButton">
               <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="0.8s">
                 <a href="#weeklyForecast" class="goToWeek">Weekly Forecast <i class="icon ion-ios-arrow-down"></i></a>
               </div>
             </div>
-    
+
           </div>
-    
+
         </div>
       </div>
     </section>
-    
+
     <section id="weeklyForecast">
       <div class="container">
         <div class="row justify-content-center">
@@ -117,7 +121,7 @@
             <h3>Next Six Days: <span class="weekDaysSummary"></span></h3>
           </div>
         </div>
-    
+
         <div class="row justify-content-around weekRows">
           <div class="col-10 col-lg-5 dayCard text-center wow fadeInUp" data-wow-delay="0.2s">
             <div class="row">
@@ -155,7 +159,7 @@
               </div>
             </div>
           </div>
-    
+
           <div class="col-10 col-lg-5 dayCard text-center wow fadeInUp" data-wow-delay="0.4s">
             <div class="row">
               <div class="col-5 dayIconHighlight">
@@ -193,7 +197,7 @@
             </div>
           </div>
         </div>
-    
+
         <div class="row justify-content-around weekRows">
           <div class="col-10 col-lg-5 dayCard text-center wow fadeInUp" data-wow-delay="0.2s">
             <div class="row">
@@ -231,7 +235,7 @@
               </div>
             </div>
           </div>
-    
+
           <div class="col-10 col-lg-5 dayCard text-center wow fadeInUp" data-wow-delay="0.4s">
             <div class="row">
               <div class="col-5 dayIconHighlight">
@@ -269,7 +273,7 @@
             </div>
           </div>
         </div>
-    
+
         <div class="row justify-content-around weekRows">
           <div class="col-10 col-lg-5 dayCard text-center wow fadeInUp" data-wow-delay="0.2s">
             <div class="row">
@@ -307,7 +311,7 @@
               </div>
             </div>
           </div>
-    
+
           <div class="col-10 col-lg-5 dayCard text-center wow fadeInUp" data-wow-delay="0.4s">
             <div class="row">
               <div class="col-5 dayIconHighlight">
@@ -353,14 +357,19 @@
     <p class="love"><a href="https://darksky.net/poweredby/" target="_blank">Powered by NUTN OASE Lab.</a> Made with <i
         class="icon ion-heart heartbeat"></i> by <a href="https://twitter.com/faahim01" target="_blank">Tsai Yi Lin</a></p>
   </footer>
-
+  <!-- 天氣 cdn -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/skycons/1396634940/skycons.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js'></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU" async defer></script>
-
+  <!-- 硬體 cdn -->
+  <script src="https://blockly.webduino.io/lib/jquery-1.9.1.min.js"></script>
+  <script src="https://blockly.webduino.io/components/webduino-js/dist/webduino-all.min.js"></script>
+  <script src="https://blockly.webduino.io/lib/webduino-blockly.js"></script>
+  <script src="https://blockly.webduino.io/lib/runtime.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/async/2.6.1/async.min.js"></script>
 
   <script src="js/index.js"></script>
 

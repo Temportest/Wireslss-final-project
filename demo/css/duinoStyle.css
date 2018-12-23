@@ -1,0 +1,8 @@
+#demo-area-01-show {
+font-size: 60px;
+pointer-events: auto!important;
+}
+
+.audio-frame{
+  display: none;
+}
