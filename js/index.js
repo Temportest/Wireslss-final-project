@@ -258,6 +258,12 @@ function getCityWeatherData(longitude, latitude) {
   ], function (err, result) {
     // result now equals 'done'
     console.log(result);
+    setTimeout(() => {
+      const zhText = '目前天氣晴最高溫30度最低溫18度';
+      const audio = document.getElementById('audio');
+      console.log(audio);
+      audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+    }, 4000);
     onStart();
   });
 
@@ -289,6 +295,10 @@ function getNowGEOWeatherData() {
   ], function (err, result) {
     // result now equals 'done'
     console.log(result);
+      const zhText = '目前台南市天氣晴最高溫36度最低溫18度';
+      const audio = document.getElementById('audio');
+      console.log(audio);
+      audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
     onStart();
   });
 
