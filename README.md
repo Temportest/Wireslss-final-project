@@ -43,3 +43,9 @@ let zhText='請問您要查詢哪裡的天氣';
 
 
 - [天氣查詢](https://temporatry.github.io/Wireslss-final-project/local-weather-app/index.html)
+
+
+- [Demo Web](https://wireless-project.nutn-oase-lab.tk/demo)
+
+- [local-weather-app](https://wireless-project.nutn-oase-lab.tk/local-weather-app)
+
