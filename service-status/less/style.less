@@ -1,0 +1,192 @@
+/*
+ * Colours
+ */
+@Green: rgb(71, 220, 178);
+@GreenBorder: rgb(9, 156, 107);
+@GreenShading: rgba(21, 139, 100, 0.8);
+@GreenGlow: rgba(21, 139, 100, 0.7);
+
+@Red: rgb(220, 24, 71);
+@RedBorder: rgb(156, 9, 9);
+@RedShading: rgba(139, 21, 21, 0.8);
+@RedGlow: rgba(139, 21, 21, 0.7);
+
+/*
+ * Mixins
+ */
+.ServiceTally() {
+   font-size: 46px;
+   font-weight: 600;
+   margin-top: 16px;
+   margin-left: 16px;
+   width: 150px;
+   text-align: center;   
+}
+
+.Status(@borderColor, @backgroundColor, @shading) {
+   position: absolute;
+   border-style: solid;
+   z-index: 2;
+   border-width: 1px;
+   border-color: @borderColor;
+   background-color: @backgroundColor;
+   width: 22px;
+   height: 22px;
+   -moz-border-radius: 50%;
+   -webkit-border-radius: 50%;
+   border-radius: 50%;
+   -webkit-box-sizing: border-box;
+   -moz-box-sizing: border-box;
+   box-sizing: border-box;
+   -webkit-box-shadow: inset -0.6px -1.9px 4px 0px @shading;
+   -moz-box-shadow: inset -0.6px -1.9px 4px 0px @shading;
+   box-shadow: inset -0.6px -1.9px 4px 0px @shading;
+}
+
+.StatusGlow(@GlowColour) {
+   z-index: 1;
+   position: absolute;
+   background-color: #2f343a;
+   width: 22px;
+   height: 22px;
+   -moz-border-radius: 50%;
+   -webkit-border-radius: 50%;
+   border-radius: 50%;
+   -webkit-box-sizing: border-box;
+   -moz-box-sizing: border-box;
+   box-sizing: border-box;
+   -webkit-box-shadow: 0px 0px 8px 1px @GlowColour;
+   -moz-box-shadow: 0px 0px 8px 1px @GlowColour;
+   box-shadow: 0px 0px 8px 1px @GlowColour;
+}
+
+.ServiceMessage(@colour) {
+   font-size: 36px;
+   font-weight: 600;
+   color: @colour;
+   margin-top: 8px;
+   margin-left: 16px;
+   width: 150px;
+   text-align: center;
+}
+
+.container {
+   font-family: 'Roboto', sans-serif;
+   font-weight: 300;
+   padding: 35px;
+   width: 1000px;
+   margin-left:auto;
+   margin-right: auto;
+   display: flex;
+   
+  /*
+   * Service containers
+   */
+   .wrapper {
+      margin-left:auto;
+      margin-right: auto;
+      color: white;
+      width: 250px;
+      height: 170px;
+      border-radius: 10px;
+      padding: 8px;
+      background:#2f343a;
+   }
+   
+   .fail-glow {
+      -webkit-box-shadow: 0px 0px 12px 2px rgba(139, 21, 21, 0.7);
+      -moz-box-shadow: 0px 0px 12px 2px rgba(139, 21, 21, 0.7);
+      box-shadow: 0px 0px 12px 2px rgba(139, 21, 21, 0.7);
+   }
+   
+   .service__name {
+      text-align: center;
+      font-weight: 400;
+      font-size: 20px;
+      border-bottom: 1px solid gray;
+      padding: 0px 0px 8px 0px;
+   }
+   
+  /*
+   * Success container
+   */
+   .service-status__container__success {
+      position: relative;
+      
+      .service__tally {
+         .ServiceTally;
+      }
+      .service__message {
+         .ServiceMessage(@Green);
+      }
+      
+     /*
+      * traffic lights
+      */
+      .service__traffic-lights-wrapper {
+         position: absolute;
+         top: 85px;
+         right: 67px;
+         
+         .service__traffic-lights-container {
+            .status-green {
+               .Status(@GreenBorder, @Green, @GreenShading);
+            }
+            .status-green-glow {
+               .StatusGlow(@GreenGlow);
+            }
+            .status-red {
+               .Status(@RedBorder, @Red, @RedShading);
+            }
+            .status-red-glow {
+               .StatusGlow(@RedGlow);
+            }
+            .covered {
+               opacity: 0.1;
+            }
+         }
+      }
+   }
+   
+  /*
+   * Failure container
+   */
+   .service-status__container__failing {
+      position: relative;
+      
+      .service__tally {
+         .ServiceTally;
+      }
+      .service__message {
+         .ServiceMessage(@Red);
+      }
+      
+     /*
+      * traffic lights
+      */
+      .service__traffic-lights-wrapper {
+         position: absolute;
+         top: 85px;
+         right: 67px;
+         
+         .service__traffic-lights-container {
+            .status-green {
+               .Status(@GreenBorder, @Green, @GreenShading);
+            }
+            .status-green-glow {
+               .StatusGlow(@GreenGlow);
+            }
+            .status-red {
+               .Status(@RedBorder, @Red, @RedShading);
+            }
+            .status-red-glow {
+               .StatusGlow(@RedGlow);
+            }
+            .covered {
+               opacity: 0.1;
+            }
+         }
+      }
+   }
+}
+

@@ -1,0 +1,249 @@
+/*
+ * Colours
+ */
+/*
+ * Mixins
+ */
+.status-container {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  padding: 35px;
+  min-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+}
+.status-container .wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  color: white;
+  min-width: 45%;
+  height: 290px;
+  border-radius: 10px;
+  padding: 8px;
+  background: #2f343a;
+}
+.status-container .fail-glow {
+  -webkit-box-shadow: 0px 0px 12px 2px rgba(139, 21, 21, 0.7);
+  -moz-box-shadow: 0px 0px 12px 2px rgba(139, 21, 21, 0.7);
+  box-shadow: 0px 0px 12px 2px rgba(139, 21, 21, 0.7);
+}
+.status-container .service__name {
+  text-align: center;
+  font-weight: 600;
+  font-size: 25px;
+  border-bottom: 1px solid gray;
+  padding: 0px 0px 8px 0px;
+}
+.status-container .service-status__container__success {
+  position: relative;
+  /*
+      * traffic lights
+      */
+}
+.status-container .service-status__container__success .service__tally {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 16px;
+  margin-left: 56px;
+  width: auto;
+  word-break: normal;
+  /* text-align: center; */
+}
+.status-container .service-status__container__success .service__message__success {
+  font-size: 26px;
+  font-weight: 600;
+  color: #47dcb2;
+  margin-top: 8px;
+  margin-left: 16px;
+  width: 150px;
+  text-align: center;
+}
+.status-container .service-status__container__success .service__message__failing {
+  font-size: 26px;
+  font-weight: 600;
+  color: #dc1847;
+  margin-top: 8px;
+  margin-left: 16px;
+  width: 150px;
+  text-align: center;
+}
+.status-container .service-status__container__success .service__traffic-lights-wrapper {
+  position: absolute;
+  top: 85px;
+  right: 67px;
+}
+.status-container .service-status__container__success .service__traffic-lights-wrapper .service__traffic-lights-container .status-green {
+  position: absolute;
+  border-style: solid;
+  z-index: 2;
+  border-width: 1px;
+  border-color: #099c6b;
+  background-color: #47dcb2;
+  width: 22px;
+  height: 22px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: inset -0.6px -1.9px 4px 0px rgba(21, 139, 100, 0.8);
+  -moz-box-shadow: inset -0.6px -1.9px 4px 0px rgba(21, 139, 100, 0.8);
+  box-shadow: inset -0.6px -1.9px 4px 0px rgba(21, 139, 100, 0.8);
+}
+.status-container .service-status__container__success .service__traffic-lights-wrapper .service__traffic-lights-container .status-green-glow {
+  z-index: 1;
+  position: absolute;
+  background-color: #2f343a;
+  width: 22px;
+  height: 22px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: 0px 0px 8px 1px rgba(21, 139, 100, 0.7);
+  -moz-box-shadow: 0px 0px 8px 1px rgba(21, 139, 100, 0.7);
+  box-shadow: 0px 0px 8px 1px rgba(21, 139, 100, 0.7);
+}
+.status-container .service-status__container__success .service__traffic-lights-wrapper .service__traffic-lights-container .status-red {
+  position: absolute;
+  border-style: solid;
+  z-index: 2;
+  border-width: 1px;
+  border-color: #9c0909;
+  background-color: #dc1847;
+  width: 22px;
+  height: 22px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: inset -0.6px -1.9px 4px 0px rgba(139, 21, 21, 0.8);
+  -moz-box-shadow: inset -0.6px -1.9px 4px 0px rgba(139, 21, 21, 0.8);
+  box-shadow: inset -0.6px -1.9px 4px 0px rgba(139, 21, 21, 0.8);
+}
+.status-container .service-status__container__success .service__traffic-lights-wrapper .service__traffic-lights-container .status-red-glow {
+  z-index: 1;
+  position: absolute;
+  background-color: #2f343a;
+  width: 22px;
+  height: 22px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: 0px 0px 8px 1px rgba(139, 21, 21, 0.7);
+  -moz-box-shadow: 0px 0px 8px 1px rgba(139, 21, 21, 0.7);
+  box-shadow: 0px 0px 8px 1px rgba(139, 21, 21, 0.7);
+}
+.status-container .service-status__container__success .service__traffic-lights-wrapper .service__traffic-lights-container .covered {
+  opacity: 0.1;
+}
+.status-container .service-status__container__failing {
+  position: relative;
+  /*
+      * traffic lights
+      */
+}
+.status-container .service-status__container__failing .service__tally {
+  font-size: 46px;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-left: 16px;
+  width: 150px;
+  text-align: center;
+}
+.status-container .service-status__container__failing .service__message {
+  font-size: 36px;
+  font-weight: 600;
+  color: #dc1847;
+  margin-top: 8px;
+  margin-left: 16px;
+  width: 150px;
+  text-align: center;
+}
+.status-container .service-status__container__failing .service__traffic-lights-wrapper {
+  position: absolute;
+  top: 85px;
+  right: 67px;
+}
+.status-container .service-status__container__failing .service__traffic-lights-wrapper .service__traffic-lights-container .status-green {
+  position: absolute;
+  border-style: solid;
+  z-index: 2;
+  border-width: 1px;
+  border-color: #099c6b;
+  background-color: #47dcb2;
+  width: 22px;
+  height: 22px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: inset -0.6px -1.9px 4px 0px rgba(21, 139, 100, 0.8);
+  -moz-box-shadow: inset -0.6px -1.9px 4px 0px rgba(21, 139, 100, 0.8);
+  box-shadow: inset -0.6px -1.9px 4px 0px rgba(21, 139, 100, 0.8);
+}
+.status-container .service-status__container__failing .service__traffic-lights-wrapper .service__traffic-lights-container .status-green-glow {
+  z-index: 1;
+  position: absolute;
+  background-color: #2f343a;
+  width: 22px;
+  height: 22px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: 0px 0px 8px 1px rgba(21, 139, 100, 0.7);
+  -moz-box-shadow: 0px 0px 8px 1px rgba(21, 139, 100, 0.7);
+  box-shadow: 0px 0px 8px 1px rgba(21, 139, 100, 0.7);
+}
+.status-container .service-status__container__failing .service__traffic-lights-wrapper .service__traffic-lights-container .status-red {
+  position: absolute;
+  border-style: solid;
+  z-index: 2;
+  border-width: 1px;
+  border-color: #9c0909;
+  background-color: #dc1847;
+  width: 22px;
+  height: 22px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: inset -0.6px -1.9px 4px 0px rgba(139, 21, 21, 0.8);
+  -moz-box-shadow: inset -0.6px -1.9px 4px 0px rgba(139, 21, 21, 0.8);
+  box-shadow: inset -0.6px -1.9px 4px 0px rgba(139, 21, 21, 0.8);
+}
+.status-container .service-status__container__failing .service__traffic-lights-wrapper .service__traffic-lights-container .status-red-glow {
+  z-index: 1;
+  position: absolute;
+  background-color: #2f343a;
+  width: 22px;
+  height: 22px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: 0px 0px 8px 1px rgba(139, 21, 21, 0.7);
+  -moz-box-shadow: 0px 0px 8px 1px rgba(139, 21, 21, 0.7);
+  box-shadow: 0px 0px 8px 1px rgba(139, 21, 21, 0.7);
+}
+.status-container .service-status__container__failing .service__traffic-lights-wrapper .service__traffic-lights-container .covered {
+  opacity: 0.1;
+}

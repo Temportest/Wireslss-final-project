@@ -30,7 +30,7 @@ function locateYou() {
 				console.log(latitude + " " + longitude + "geo");
 				resolve();
 			});
-			
+
 		}
 	}, function (error) {
 		console.log(error);
@@ -218,7 +218,11 @@ boardReady({ device: 'nWxRb' }, function (board) {
 function onStart() {
 	ultrasonic.ping(function (cm) {
 		nowDistance = ultrasonic.distance;
-		document.getElementById("status").innerHTML = '連接成功';
+		// 渲染溫濕度
+		document.getElementById("service-status").innerHTML = "Online";
+		document.getElementById("service-status").className = "service__message__success";
+		document.getElementById("status-red").className = "status-red covered";
+		document.getElementById("status-green").className = "status-green";
 		if (restart) {
 			console.log('超音波初始化中...');
 			beforDistance = nowDistance;
@@ -227,15 +231,16 @@ function onStart() {
 		else {
 			let absDistance = Math.abs(nowDistance - beforDistance);
 			console.log("目前距離：" + nowDistance + " 前一次距離：" + beforDistance + " 差距：" + absDistance);
-			document.getElementById("demo-area-01-show").innerHTML = nowDistance;
+			// 渲染超音波距
+			document.getElementById("service-distance").innerHTML = `超 音 波： ${nowDistance}`;
 			if (absDistance >= 100) {
-				document.getElementById("status").innerHTML = '連接成功[機器人觸發]';
-				document.getElementById("demo-area-01-show").style.color = '#ff0000';
+				//document.getElementById("service__message").innerHTML = '連接成功[機器人觸發]';
+				//document.getElementById("service__message").style.color = '#ff0000';
 				restart = true;
 				ultrasonic.stopPing(); // 停止超音波偵測
 				startRecognize();
 			} else {
-				document.getElementById("demo-area-01-show").style.color = '#000000';
+				//document.getElementById("service__message").style.color = '#000000';
 			}
 			beforDistance = nowDistance;
 		}
@@ -244,10 +249,9 @@ function onStart() {
 
 // 溫濕度初始化
 function onStartDHT() {
-	document.getElementById("demo-area-02-show").style.fontSize = 20 + "px";
-	document.getElementById("demo-area-02-show").style.lineHeight = 20 + "px";
 	dht.read(function (evt) {
-		document.getElementById("demo-area-02-show").innerHTML = (['溫度：', dht.temperature, '度<br/>濕度：', dht.humidity, '%'].join(''));
+		document.getElementById("service-temp").innerHTML = `室內溫度： ${dht.temperature} °C`;
+		document.getElementById("service-humid").innerHTML = `室內濕度： ${dht.humidity} %`
 	}, 1000);
 }
 
@@ -274,7 +278,6 @@ if (!("webkitSpeechRecognition" in window)) {
 }
 
 function voiceEndCallback() {
-	document.getElementById("status").innerHTML = '連接成功[語音辨識]';
 	// 開始語音辨識
 	window._recognition.onresult = function (event, result) {
 		result = {};
@@ -286,6 +289,7 @@ function voiceEndCallback() {
 			console.log("final");
 		} else if (event.results[result.resultLength].isFinal === false) {
 			// 語音辨識持續偵測
+			document.getElementById("typing").innerHTML = city;
 		}
 	};
 	window._recognition.start();
@@ -339,7 +343,7 @@ function parseCity(city) {
 		window._recognition.stop();
 	}
 	else if (city.indexOf('金門') !== -1) {
-		getCityWeatherData(118.320213, 24.433040,  '金門');
+		getCityWeatherData(118.320213, 24.433040, '金門');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
@@ -409,7 +413,7 @@ function parseCity(city) {
 		window._recognition.stop();
 	}
 	else if (city.indexOf('台南') !== -1) {
-		getCityWeatherData(120.2513, 23.1417, '台南');
+		getCityWeatherData(120.2155,22.9920, '台南');
 		window._recognition.status = false;
 		window._recognition.stop();
 	}
@@ -438,7 +442,7 @@ function getCityWeatherData(lng, lat, city) {
 			// 將經緯度更新為該縣市
 			latitude = lat;
 			longitude = lng;
-			console.log(lat + " "+lng);
+			console.log(lat + " " + lng);
 			// Google API取得目前地址
 			getLocation().then((data) => {
 				// 取得縣市名稱
@@ -460,7 +464,7 @@ function getCityWeatherData(lng, lat, city) {
 		showCondition();
 		const addressComponents = addressData.results[2].address_components.length;
 		const city = addressData.results[2].address_components[addressComponents - 3].long_name;
-			speakTTS(`您查詢的縣市為 ${city}. 最高溫 ${Math.round(weatherData.daily.data[0].temperatureMax)}度 最低溫 ${Math.round(weatherData.daily.data[0].temperatureMin)}度`);
+		speakTTS(`您查詢的縣市為 ${city}. 最高溫 ${Math.round(weatherData.daily.data[0].temperatureMax)}度 最低溫 ${Math.round(weatherData.daily.data[0].temperatureMin)}度`);
 		onStart();
 	});
 
@@ -486,7 +490,7 @@ function getNowGEOWeatherData() {
 		},
 		function (callback) {
 			// 取得使用者經緯度
-			locateYou().then(function(){
+			locateYou().then(function () {
 				callback(null);
 			});
 		},
@@ -517,12 +521,17 @@ function getNowGEOWeatherData() {
 
 }
 
-
+let statusDelete=true;
 function showCondition() {
 	//Initiate wow.js
 	new WOW().init();
 	const weatherSection = document.getElementById('weather-section');
 	const statusSection = document.getElementById('status-section');
 	weatherSection.style.display = "block";
-	statusSection.style.display = "none";
+	if (statusDelete){
+		statusSection.remove();
+		statusDelete=false;
+	}
+	locateYou();
+	getWeather();
 }

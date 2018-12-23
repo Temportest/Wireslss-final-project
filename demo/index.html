@@ -12,6 +12,7 @@
 
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/duinoStyle.css">
+  <link rel="stylesheet" href="css/serviceStyle.css">
 
 
 </head>
@@ -20,11 +21,28 @@
   <div class="background" id="background-img"></div>
   <button onclick="showCondition()"></button>
   <section class="status-container" id="status-section">
-    <div><span id="status">尚未連接</span></div>
+    <!-- <div><span id="status">尚未連接</span></div>
     <div><span id="demo-area-01-show">version6</span></div>
     <div><span id="demo-area-02-show">溫濕度</span></div>
-    <div><span id="area-show">地區</span></div>
+    <div><span id="area-show">地區</span></div> -->
     <iframe src="" allow="autoplay" id="audio" class="audio-frame"></iframe>
+    <div class="service-status__container__success wrapper success-glow">
+      <div class="service__name">Dashboard</div>
+      <div class="service__tally"id="service-temp">室內溫度：</div>
+      <div class="service__tally" id="service-humid">室內濕度：</div>
+      <div class="service__tally" id="service-distance">超 音 波：</div>
+      <div class="service__message__failing"id="service-status">Offline</div>
+      <div class="service__traffic-lights-wrapper">
+        <div class="service__traffic-lights-container">
+          <div class="status-green covered" id="status-green"></div>
+          <div class="status-green-glow "></div>
+          <br><br>
+          <div class="status-red" id="status-red"></div>
+          <div class="status-red-glow"></div>
+        </div>
+      </div>
+        <div class="service__tally" id="typing"></div>
+    </div>
   </section>
 
   <section class="weather-section" id="weather-section">
@@ -111,6 +129,31 @@
           </div>
 
         </div>
+      </div>
+    </section>
+
+    <section class="status-container weather" id="status-section">
+      <!-- <div><span id="status">尚未連接</span></div>
+        <div><span id="demo-area-01-show">version6</span></div>
+        <div><span id="demo-area-02-show">溫濕度</span></div>
+        <div><span id="area-show">地區</span></div> -->
+      <iframe src="" allow="autoplay" id="audio" class="audio-frame"></iframe>
+      <div class="service-status__container__success wrapper success-glow">
+        <div class="service__name">Dashboard</div>
+        <div class="service__tally" id="service-temp">室內溫度：</div>
+        <div class="service__tally" id="service-humid">室內濕度：</div>
+        <div class="service__tally" id="service-distance">超 音 波：</div>
+        <div class="service__message__failing" id="service-status">Offline</div>
+        <div class="service__traffic-lights-wrapper">
+          <div class="service__traffic-lights-container">
+            <div class="status-green covered" id="status-green"></div>
+            <div class="status-green-glow "></div>
+            <br><br>
+            <div class="status-red" id="status-red"></div>
+            <div class="status-red-glow"></div>
+          </div>
+        </div>
+        <div class="service__tally" id="typing"></div>
       </div>
     </section>
 
