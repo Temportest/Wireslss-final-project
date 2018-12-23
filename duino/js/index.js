@@ -92,7 +92,7 @@ function voiceEndCallback() {
 function startRecognize() {
   let zhText = '請問您要';
   var audio = document.getElementById('audio');
-  audio.src = "audio/siri_begin.mp3";
+  audio.src = "https://temporatry.github.io/Wireslss-final-project/audio/siri_begin.mp3";
   setTimeout(function () {
     console.log('resta')
     voiceEndCallback();
@@ -270,12 +270,9 @@ function speakTTS(text) {
 }
 // 目前位置的天氣資料
 function getNowGEOWeatherData() {
+  console.log('getNowGEOWeatherData');
   async.waterfall([
     function (callback) {
-      // const zhText = '搜尋中請稍候';
-      // const audio = document.getElementById('audio');
-      // console.log(audio);
-      // audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
       speakTTS('搜尋中請稍候');
       callback(null);
     },
