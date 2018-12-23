@@ -1,6 +1,4 @@
-$(document).ready(function() {
-
-	//Variables for working with Location, Temprature and Times
+//Variables for working with Location, Temprature and Times
 	var lat;
 	var lon;
 	var tempInF;
@@ -22,35 +20,24 @@ $(document).ready(function() {
 	};
 
 	function locateYou() {
-		//Try to get users location using their IP adress automattically.
-		//It's not very precise but It's a way to get users location even if
-		//their browser doesn't support Geolocation or if they refuse to share it.
-		var ipApiCall = "https://ipapi.co/json";
-		$.getJSON(ipApiCall, function(ipData){
-			lat = ipData.latitude;
-			lon = ipData.longitude;
-			//console.log(lat+" "+lon+"ip"); (For Debugginh)
-			yourAddress();
-			getWeather();
-		});
-
 		//Try to get location from users browser (device).
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function (position) {
 				lat = position.coords.latitude;
 				lon = position.coords.longitude;
-				// console.log(lat+" "+lon+"geo"); (For Debugging)
+				console.log(lat + " " + lon + "geo");
 				yourAddress();
 				getWeather();
 			});
 		}
-	}
+	};
 
 	//After collecting the Latiture and Longitute, Getting their formatted address from Google Maps.
 	function yourAddress() {
-		var googleApiCall = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`;
-		$.getJSON(googleApiCall, function(locationName){
-			$(".locName").html(locationName.results[2].formatted_address);
+		var googleApiCall = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU&language=zh-TW`;
+		$.getJSON(googleApiCall, function (locationName) {
+			console.log(locationName.results);
+			$(".locName").html(locationName.results[4].formatted_address);
 			// console.log(locationName.results[2].formatted_address); (For checking the precision)
 		});
 	}
@@ -204,25 +191,6 @@ $(document).ready(function() {
 		}, 1000);
 	});
 
-
-	// //Google location Search
-	// function initialize() { 
-  //   var input = document.getElementById('locSearchBox');
-  //   var autocomplete = new google.maps.places.Autocomplete(input);
-  //   google.maps.event.addListener(autocomplete, 'place_changed', function () {
-  //     var place = autocomplete.getPlace();
-  //     lat = place.geometry.location.lat();
-	// 		lon = place.geometry.location.lng();
-	// 		console.log(place);
-  //     $(".locName").html(place.formatted_address);
-  //     //Calling the getWeather function to fetch data for Searched location
-  //     getWeather();
-  //   	});
-	// }
-	// google.maps.event.addDomListener(window, 'load', initialize);
-  
-  
-});
 
 
 function show(){

@@ -2,7 +2,8 @@ body {
   font-family: "Segoe UI Light", "Open Sans", sans-serif;
   font-size: 1em;
   background-color: #E9E9E9;
-  margin: 0;
+  margin: 0px;
+  min-height: 100%;
 }
 .background{
   background: url(https://pixfeeds.com/images/14/388569/1200-497100312-cumulus-clouds.jpg) center center/cover fixed;
@@ -270,6 +271,17 @@ transition: background-image 1.5s linear;
   margin-right: 0;
 }
 
+#footer{
+  /* 設定footer的高度 */
+    height: 40px;
+    box-sizing: border-box;
+    /* 設定footer絕對位置在底部 */
+    position: absolute;
+    bottom: 0;
+    /* 展開footer寬度 */
+    width: 100%;
+    margin: 10px;
+}
 #footer .love {
   margin: 10px auto;
   text-align: center;
