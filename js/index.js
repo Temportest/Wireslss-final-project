@@ -1,17 +1,18 @@
 let nowDistance; // 目前距離
 let beforDistance = 0; // 前一次距離
-let restart=true; // 初始化
+let restart = true; // 初始化
 let dht; // 溫濕度
 boardReady({ device: 'nWxRb' }, function (board) {
   board.systemReset();
   board.samplingInterval = 500;
   ultrasonic = getUltrasonic(board, 8, 9); // 超音波腳位8 9
   dht = getDht(board, 13);
-  onStartDHT();
-  onStart(); // 開始偵測
+  onStartDHT(); // 持續偵測溫濕度
+  onStart(); // 開始偵測超音波
 });
 
-function onStart(){
+// 超音波初始化
+function onStart() {
   ultrasonic.ping(function (cm) {
     nowDistance = ultrasonic.distance;
     document.getElementById("status").innerHTML = '連接成功';
@@ -20,25 +21,26 @@ function onStart(){
       beforDistance = nowDistance;
       restart = false;
     }
-    else{
-      let absDistance = Math.abs(nowDistance-beforDistance);
+    else {
+      let absDistance = Math.abs(nowDistance - beforDistance);
       console.log("目前距離：" + nowDistance + " 前一次距離：" + beforDistance + " 差距：" + absDistance);
       document.getElementById("demo-area-01-show").innerHTML = nowDistance;
       if (absDistance >= 100) {
         document.getElementById("status").innerHTML = '連接成功[機器人觸發]';
         document.getElementById("demo-area-01-show").style.color = '#ff0000';
         restart = true;
-        ultrasonic.stopPing();
-        call();
+        ultrasonic.stopPing(); // 停止超音波偵測
+        startRecognize();
       } else {
         document.getElementById("demo-area-01-show").style.color = '#000000';
       }
       beforDistance = nowDistance;
     }
-    
   }, 500);
 }
-function onStartDHT(){
+
+// 溫濕度初始化
+function onStartDHT() {
   document.getElementById("demo-area-02-show").style.fontSize = 20 + "px";
   document.getElementById("demo-area-02-show").style.lineHeight = 20 + "px";
   dht.read(function (evt) {
@@ -74,37 +76,24 @@ function voiceEndCallback() {
   window._recognition.onresult = function (event, result) {
     result = {};
     result.resultLength = event.results.length - 1;
-    result.resultTranscript = event.results[result.resultLength][0].transcript;
+    city = event.results[result.resultLength][0].transcript;
     if (event.results[result.resultLength].isFinal === true) {
-      console.log(result.resultTranscript);
-      if (result.resultTranscript.indexOf("目前") !== -1) {
-        speak('搜尋中請稍候', ["zh-TW", 1, 1, 1], function () {
-          window._recognition.status = false;
-          window._recognition.stop();
-          //搜尋延遲等待
-          setTimeout(function () {
-            getLocation();
-            speak('目前天氣晴', ["zh-TW", 1, 1, 1], function () {
-              onStart(); // 開始偵測光敏
-            }, 0);
-          }, 3000);
-        }, 0);
-        console.log(event.results[result.resultLength]);
-      }
+      console.log(city);
+      parseCity(city);
       console.log("final");
     } else if (event.results[result.resultLength].isFinal === false) {
+      // 語音辨識持續偵測
     }
   };
   window._recognition.start();
 }
 
-function call() {
-  //responsiveVoice.speak("請問您要查詢哪裡的天氣", "Chinese Taiwan Male", { onend: voiceEndCallback });
-  
+// 觸發語音監聽事件
+function startRecognize() {
   let zhText = '請問您要';
   var audio = document.getElementById('audio');
   //audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
-  audio.src ="audio/siri_begin.mp3";
+  audio.src = "audio/siri_begin.mp3";
   setTimeout(function () {
     console.log('resta')
     voiceEndCallback();
@@ -115,32 +104,147 @@ function call() {
   // if (playPromise !== null) {
   //   playPromise.catch(() => { console.log('replay'); audio.play(); })
   // }
-  
 }
 
-function getLocation(){
-  // let longitude, latitude; // 經緯度
-  // // JS 取得經緯度
-  // if (navigator.geolocation) {
-  //   navigator.geolocation.getCurrentPosition(function (res) {
-  //     longitude = res.coords.longitude
-  //     latitude = res.coords.latitude;
-  //   }, function (error) {
-  //     console.log(error);
-  //   });
-  // } else {
-  //   console.log("Geolocation is not supported by this browser.");
-  // }
-  // // Google GeoCode API 經緯度取得地址
-  // $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`, function (data) {
-  //   console.log(JSON.stringify(data, null, 2));
-  // });
-  // var val = document.getElementById("val").value;
-  // var zhText = val;
-  // zhText = encodeURI(zhText);
-  
+// 取得目前經緯度和地址
+function getLocation() {
+  let longitude, latitude; // 經緯度
+  // JS 取得經緯度
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (res) {
+      longitude = res.coords.longitude
+      latitude = res.coords.latitude;
+      console.log(longitude + " " + latitude);
+      // Google GeoCode API 經緯度取得地址
+      $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU`, function (data) {
+        console.log(JSON.stringify(data, null, 2));
+      });
+    }, function (error) {
+      console.log(error);
+    });
+  } else {
+    console.log("Geolocation is not supported by this browser.");
+  }
+
 }
 
 
+// 取得縣市經緯度
+function parseCity(city) {
+  if (city.indexOf('台北') !== -1) {
+    getData(121.5598, 25.09108);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('新北') !== -1) {
+    getData(121.6739, 24.91571);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('宜蘭') !== -1) {
+    getData(121.7195, 24.69295);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('花蓮') !== -1) {
+    getData(121.3542, 23.7569);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('金門') !== -1) {
+    getData(118.3186, 24.43679);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('南投') !== -1) {
+    getData(120.9876, 23.83876);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('屏東') !== -1) {
+    getData(120.62, 22.54951);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('苗栗') !== -1) {
+    getData(120.9417, 24.48927);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('桃園') !== -1) {
+    getData(121.2168, 24.93759);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('高雄') !== -1) {
+    getData(120.666, 23.01087);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('基隆') !== -1) {
+    getData(121.7081, 25.10898);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('連江') !== -1) {
+    getData(119.5397, 26.19737);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('雲林') !== -1) {
+    getData(120.3897, 23.75585);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('嘉義') !== -1) {
+    getData(120.574, 23.45889);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('新竹') !== -1) {
+    getData(121.1252, 24.70328);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('彰化') !== -1) {
+    getData(120.4818, 23.99297);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('臺中') !== -1) {
+    getData(120.9417, 24.23321);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('台東') !== -1) {
+    getData(120.9876, 22.98461);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('台南') !== -1) {
+    getData(120.2513, 23.1417);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+  else if (city.indexOf('澎湖') !== -1) {
+    getData(119.6151, 23.56548);
+    window._recognition.status = false;
+    window._recognition.stop();
+  }
+}
 
-
+// 取得天氣資料
+function getData(longitude, latitude) {
+  console.log(longitude + " " + latitude);
+  speak('搜尋中請稍候', ["zh-TW", 1, 1, 1], function () {
+    window._recognition.status = false;
+    window._recognition.stop();
+    //搜尋延遲等待
+    setTimeout(function () {
+      getLocation();
+      speak('目前天氣晴', ["zh-TW", 1, 1, 1], function () {
+        onStart(); // 開始偵測光敏
+      }, 0);
+    }, 2000);
+  }, 0);
+}
