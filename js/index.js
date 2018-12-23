@@ -106,7 +106,7 @@ function startRecognize() {
 }
 
 // 取得目前經緯度和地址
-function getLocation(){
+function getLocation() {
   return new Promise(function (resolve, reject) {
     let longitude, latitude; // 經緯度
     // JS 取得經緯度
@@ -135,121 +135,136 @@ function getLocation(){
 // 取得縣市經緯度
 function parseCity(city) {
   if (city.indexOf('台北') !== -1) {
-    getData(121.5598, 25.09108);
+    getCityWeatherData(121.5598, 25.09108);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('新北') !== -1) {
-    getData(121.6739, 24.91571);
+    getCityWeatherData(121.6739, 24.91571);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('宜蘭') !== -1) {
-    getData(121.7195, 24.69295);
+    getCityWeatherData(121.7195, 24.69295);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('花蓮') !== -1) {
-    getData(121.3542, 23.7569);
+    getCityWeatherData(121.3542, 23.7569);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('金門') !== -1) {
-    getData(118.3186, 24.43679);
+    getCityWeatherData(118.3186, 24.43679);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('南投') !== -1) {
-    getData(120.9876, 23.83876);
+    getCityWeatherData(120.9876, 23.83876);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('屏東') !== -1) {
-    getData(120.62, 22.54951);
+    getCityWeatherData(120.62, 22.54951);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('苗栗') !== -1) {
-    getData(120.9417, 24.48927);
+    getCityWeatherData(120.9417, 24.48927);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('桃園') !== -1) {
-    getData(121.2168, 24.93759);
+    getCityWeatherData(121.2168, 24.93759);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('高雄') !== -1) {
-    getData(120.666, 23.01087);
+    getCityWeatherData(120.666, 23.01087);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('基隆') !== -1) {
-    getData(121.7081, 25.10898);
+    getCityWeatherData(121.7081, 25.10898);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('連江') !== -1) {
-    getData(119.5397, 26.19737);
+    getCityWeatherData(119.5397, 26.19737);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('雲林') !== -1) {
-    getData(120.3897, 23.75585);
+    getCityWeatherData(120.3897, 23.75585);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('嘉義') !== -1) {
-    getData(120.574, 23.45889);
+    getCityWeatherData(120.574, 23.45889);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('新竹') !== -1) {
-    getData(121.1252, 24.70328);
+    getCityWeatherData(121.1252, 24.70328);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('彰化') !== -1) {
-    getData(120.4818, 23.99297);
+    getCityWeatherData(120.4818, 23.99297);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('臺中') !== -1) {
-    getData(120.9417, 24.23321);
+    getCityWeatherData(120.9417, 24.23321);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('台東') !== -1) {
-    getData(120.9876, 22.98461);
+    getCityWeatherData(120.9876, 22.98461);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('台南') !== -1) {
-    getData(120.2513, 23.1417);
+    getCityWeatherData(120.2513, 23.1417);
     window._recognition.status = false;
     window._recognition.stop();
   }
   else if (city.indexOf('澎湖') !== -1) {
-    getData(119.6151, 23.56548);
+    getCityWeatherData(119.6151, 23.56548);
+    window._recognition.status = false;
+    window._recognition.stop();
+  } else if (city.indexOf('目前') !== -1) {
+    getNowGEOWeatherData();
     window._recognition.status = false;
     window._recognition.stop();
   }
 }
 
-// 取得天氣資料
-function getData(longitude, latitude) {
+// 縣市名稱取得天氣資料
+function getCityWeatherData(longitude, latitude) {
   console.log(longitude + " " + latitude);
-  // speak('搜尋中請稍候', ["zh-TW", 1, 1, 1], function () {
-  //   window._recognition.status = false;
-  //   window._recognition.stop();
-  //   //搜尋延遲等待
-  //   setTimeout(function () {
-  //     getLocation();
-  //     speak('目前天氣晴', ["zh-TW", 1, 1, 1], function () {
-  //       onStart(); // 開始偵測光敏
-  //     }, 0);
-  //   }, 2000);
-  // }, 0);
+  async.waterfall([
+    function (callback) {
+      const zhText = '搜尋中請稍候';
+      const audio = document.getElementById('audio');
+      console.log(audio);
+      audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&total=${zhText.length}&idx=0&textlen=32&client=tw-ob&q=${zhText}&tl=zh-TW`;
+      callback(null);
+    },
+    function (callback) {
+      // 直接縣市經緯度搜尋天氣
+      callback(null, 'done city weather');
+    }
+  ], function (err, result) {
+    // result now equals 'done'
+    console.log(result);
+    onStart();
+  });
+
+}
+
+// 目前位置的天氣資料
+function getNowGEOWeatherData() {
   async.waterfall([
     function (callback) {
       const zhText = '搜尋中請稍候';
@@ -262,18 +277,19 @@ function getData(longitude, latitude) {
       // arg1 now equals 'one' and arg2 now equals 'two'
       getLocation().then((data) => {
         // Google API取得目前地址
-        console.log(data);
+        callback(null, data);
       });
-      callback(null, 'three');
+      
     },
     function (arg1, callback) {
       // arg1 now equals 'three'
-      callback(null, 'done');
+      console.log(arg1);
+      callback(null, 'done now location weather');
     }
   ], function (err, result) {
     // result now equals 'done'
+    console.log(result);
+    onStart();
   });
 
 }
-
-
