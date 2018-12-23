@@ -464,7 +464,7 @@ function getCityWeatherData(lng, lat, city) {
 		showCondition();
 		const addressComponents = addressData.results[2].address_components.length;
 		const city = addressData.results[2].address_components[addressComponents - 3].long_name;
-		speakTTS(`您查詢的縣市為 ${city}. 最高溫 ${Math.round(weatherData.daily.data[0].temperatureMax)}度 最低溫 ${Math.round(weatherData.daily.data[0].temperatureMin)}度`);
+			speakTTS(`您查詢的縣市為 ${city}. ${weatherData.currently.summary} 最高溫 ${Math.round(weatherData.daily.data[0].temperatureMax)}度 最低溫 ${Math.round(weatherData.daily.data[0].temperatureMin)}度`);
 		onStart();
 	});
 
