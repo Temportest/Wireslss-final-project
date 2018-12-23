@@ -1,208 +1,198 @@
 //Variables for working with Location, Temprature and Times
 var latitude;
 var longitude;
-	var tempInF;
-	var tempInC;
-	var timeFormatted;
+var tempInF;
+var tempInC;
+var timeFormatted;
 
-	//Quotes depending on the weather
-	var weatherQuotes ={
-		rain: "\"The best thing one can do when it's raining is to let it rain.\" -Henry Wadsworth Longfellow",
-		clearDay: "\"Wherever you go, no matter what the weather, always bring your own sunshine.\" -Anthony J. D'Angelo",
-		clearNight: "\"The sky grew darker, painted blue on blue, one stroke at a time, into deeper and deeper shades of night.\" -Haruki Murakami",
-		snow: "\"So comes snow after fire, and even dragons have their ending!\" -J. R. R. Tolkien",
-		sleet: "\"Then come the wild weather, come sleet or come snow, we will stand by each other, however it blow.\" -Simon Dach",
-		wind: "\"Kites rise highest against the wind - not with it.\" -Winston Churchill",
-		fog: "\"It is not the clear-sighted who rule the world. Great achievements are accomplished in a blessed, warm fog.\" -Joseph Conrad",
-		cloudy: "\"Happiness is like a cloud, if you stare at it long enough, it evaporates.\" -Sarah McLachlan",
-		partlyCloudy: "\"Try to be a rainbow in someone's cloud.\" -Maya Angelou",
-		default: "\"The storm starts, when the drops start dropping When the drops stop dropping then the storm starts stopping.\"― Dr. Seuss "
-	};
+//Quotes depending on the weather
+var weatherQuotes = {
+	rain: "\"The best thing one can do when it's raining is to let it rain.\" -Henry Wadsworth Longfellow",
+	clearDay: "\"Wherever you go, no matter what the weather, always bring your own sunshine.\" -Anthony J. D'Angelo",
+	clearNight: "\"The sky grew darker, painted blue on blue, one stroke at a time, into deeper and deeper shades of night.\" -Haruki Murakami",
+	snow: "\"So comes snow after fire, and even dragons have their ending!\" -J. R. R. Tolkien",
+	sleet: "\"Then come the wild weather, come sleet or come snow, we will stand by each other, however it blow.\" -Simon Dach",
+	wind: "\"Kites rise highest against the wind - not with it.\" -Winston Churchill",
+	fog: "\"It is not the clear-sighted who rule the world. Great achievements are accomplished in a blessed, warm fog.\" -Joseph Conrad",
+	cloudy: "\"Happiness is like a cloud, if you stare at it long enough, it evaporates.\" -Sarah McLachlan",
+	partlyCloudy: "\"Try to be a rainbow in someone's cloud.\" -Maya Angelou",
+	default: "\"The storm starts, when the drops start dropping When the drops stop dropping then the storm starts stopping.\"― Dr. Seuss "
+};
 
-	function locateYou() {
-		//Try to get location from users browser (device).
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function (position) {
-				latitude = position.coords.latitude;
-				longitude = position.coords.longitude;
-				console.log(latitude + " " + longitude + "geo");
-				// yourAddress();
-				// getWeather();
-			});
-		}
-	};
+function locateYou() {
+	//Try to get location from users browser (device).
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function (position) {
+			latitude = position.coords.latitude;
+			longitude = position.coords.longitude;
+			console.log(latitude + " " + longitude + "geo");
+			// yourAddress();
+			// getWeather();
+		});
+	}
+};
 
-	//After collecting the Latiture and Longitute, Getting their formatted address from Google Maps.
-	// function yourAddress() {
-	// 	var googleApiCall = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU&language=zh-TW`;
-	// 	$.getJSON(googleApiCall, function (locationName) {
-	// 		console.log(locationName.results);
-	// 		$(".locName").html(locationName.results[4].formatted_address);
-	// 		// console.log(locationName.results[2].formatted_address); (For checking the precision)
-	// 	});
-	// }
+//After collecting the Latiture and Longitute, Getting their formatted address from Google Maps.
+// function yourAddress() {
+// 	var googleApiCall = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU&language=zh-TW`;
+// 	$.getJSON(googleApiCall, function (locationName) {
+// 		console.log(locationName.results);
+// 		$(".locName").html(locationName.results[4].formatted_address);
+// 		// console.log(locationName.results[2].formatted_address); (For checking the precision)
+// 	});
+// }
 
-	function getWeather() {
+function getWeather() {
+	return new Promise(function (resolve, reject) {
 		//Looking up the weather from Darkskies using users latitude and longitude.
 		//Please don't use this API key. Get your own from DarkSkies.
 		var weatherApiKey = "a3219d4e2772db6e34c6491e62144b27";
-		var weatherApiCall = "https://api.darksky.net/forecast/" + weatherApiKey + "/" + latitude + "," + longitude +"?units=si&lang=zh-tw";
+		var weatherApiCall = "https://api.darksky.net/forecast/" + weatherApiKey + "/" + latitude + "," + longitude + "?units=si&lang=zh-tw";
 		$.ajax({
 			url: weatherApiCall,
 			type: "GET",
 			dataType: "jsonp",
-			success: function(weatherData) {
+			success: function (weatherData) {
 				//Fetching all the infor from the JSON file and plugging it into UI
 				$(".currentTemp").html((weatherData.currently.temperature).toFixed(1));
 				$(".weatherCondition").html(weatherData.currently.summary);
 				$(".feelsLike").html((weatherData.currently.apparentTemperature).toFixed(1) + " °C");
 				$(".humidity").html((weatherData.currently.humidity * 100).toFixed(0));
-				$(".windSpeed").html((weatherData.currently.windSpeed/0.6213).toFixed(1));
-				
+				$(".windSpeed").html((weatherData.currently.windSpeed / 0.6213).toFixed(1));
+
 				$(".todaySummary").html(weatherData.hourly.summary);
-				$(".tempMin").html((weatherData.daily.data[0].temperatureMin).toFixed(1)+" °C");
-				$(".tempMax").html((weatherData.daily.data[0].temperatureMax).toFixed(1)+" °C");
+				$(".tempMin").html((weatherData.daily.data[0].temperatureMin).toFixed(1) + " °C");
+				$(".tempMax").html((weatherData.daily.data[0].temperatureMax).toFixed(1) + " °C");
 
-				$(".cloudCover").text((weatherData.currently.cloudCover*100).toFixed(1)+" %");
+				$(".cloudCover").text((weatherData.currently.cloudCover * 100).toFixed(1) + " %");
 				$(".dewPoint").text(weatherData.currently.dewPoint + " °F");
-  			
-  			//Converting UNIX time
-  			unixToTime(weatherData.daily.data[0].sunriseTime);
-  			var sunriseTimeFormatted = timeFormatted+" AM";
-  			$(".sunriseTime").text(sunriseTimeFormatted);
 
-  			unixToTime(weatherData.daily.data[0].sunsetTime);
-  			var sunsetTimeFormatted = timeFormatted+" PM";
-  			$(".sunsetTime").text(sunsetTimeFormatted);
+				//Converting UNIX time
+				unixToTime(weatherData.daily.data[0].sunriseTime);
+				var sunriseTimeFormatted = timeFormatted + " AM";
+				$(".sunriseTime").text(sunriseTimeFormatted);
 
-  			//Loading weekly Data in UI
-  			$(".weekDaysSummary").text(weatherData.daily.summary);
-  			var skycons = new Skycons({"color": "white"});
+				unixToTime(weatherData.daily.data[0].sunsetTime);
+				var sunsetTimeFormatted = timeFormatted + " PM";
+				$(".sunsetTime").text(sunsetTimeFormatted);
 
-  			for (i=1; i<7; i++) {
-  				$(".weekDayTempMax"+i).text(weatherData.daily.data[i].temperatureMax);
-  				$(".weekDayTempMin"+i).text(weatherData.daily.data[i].temperatureMin);
-  				$(".weekDaySunrise"+i).text(unixToTime(weatherData.daily.data[i].sunriseTime));
-  				$(".weekDaySunset"+i).text(unixToTime(weatherData.daily.data[i].sunsetTime));
-  				$(".weekDayName"+i).text(unixToWeekday(weatherData.daily.data[i].time));
-  				$(".weekDaySummary"+i).text(weatherData.daily.data[i].summary);
-  				$(".weekDayWind"+i).text((weatherData.daily.data[i].windSpeed/0.6213).toFixed(2));
-  				$(".weekDayHumid"+i).text((weatherData.daily.data[i].humidity*100).toFixed(0));
-  				$(".weekDayCloud"+i).text((weatherData.daily.data[i].cloudCover*100).toFixed(0));
-  				skycons.set("weatherIcon"+i, weatherData.daily.data[i].icon);
-  			}
+				//Loading weekly Data in UI
+				$(".weekDaysSummary").text(weatherData.daily.summary);
+				var skycons = new Skycons({ "color": "white" });
 
-  			//Skycon Icons
-  			skycons.set("weatherIcon", weatherData.currently.icon);
-  			skycons.set("expectIcon", weatherData.hourly.icon);
-  			skycons.play();
+				for (i = 1; i < 7; i++) {
+					$(".weekDayTempMax" + i).text(weatherData.daily.data[i].temperatureMax);
+					$(".weekDayTempMin" + i).text(weatherData.daily.data[i].temperatureMin);
+					$(".weekDaySunrise" + i).text(unixToTime(weatherData.daily.data[i].sunriseTime));
+					$(".weekDaySunset" + i).text(unixToTime(weatherData.daily.data[i].sunsetTime));
+					$(".weekDayName" + i).text(unixToWeekday(weatherData.daily.data[i].time));
+					$(".weekDaySummary" + i).text(weatherData.daily.data[i].summary);
+					$(".weekDayWind" + i).text((weatherData.daily.data[i].windSpeed / 0.6213).toFixed(2));
+					$(".weekDayHumid" + i).text((weatherData.daily.data[i].humidity * 100).toFixed(0));
+					$(".weekDayCloud" + i).text((weatherData.daily.data[i].cloudCover * 100).toFixed(0));
+					skycons.set("weatherIcon" + i, weatherData.daily.data[i].icon);
+				}
 
-  			//Coverting data between Celcius and Farenheight
-  			tempInF = ((weatherData.currently.temperature*9/5) + 32).toFixed(1);
-  			tempInC = (weatherData.currently.temperature).toFixed(1);
-  			feelsLikeInC = 	(weatherData.currently.apparentTemperature).toFixed(1);
-  			feelsLikeInF = ((weatherData.currently.apparentTemperature*9/5) + 32).toFixed(1);
+				//Skycon Icons
+				skycons.set("weatherIcon", weatherData.currently.icon);
+				skycons.set("expectIcon", weatherData.hourly.icon);
+				skycons.play();
 
-  			//Load Quotes
-  			var selectQuote = weatherData.currently.icon;
-  			var loadQuote = $(".quote");
-  			switch (weatherData.currently.icon) {
-  				case "clear-day":
-  					$(".quote").text(weatherQuotes.clearDay);
-  					break;
-  				case "clear-night":
-  					$(".quote").text(weatherQuotes.clearNight);
-  					break;
-  				case "rain":
-  					$(".quote").text(weatherQuotes.rain);
-  					break;
-  				case "snow":
-  					$(".quote").text(weatherQuotes.snow);
-  					break;
-  				case "sleet":
-  					$(".quote").text(weatherQuotes.sleet);
-  					break;
-  				case "clear-night":
-  					$(".quote").text(weatherQuotes.clearNight);
-  					break;
-  				case "wind":
-  					$(".quote").text(weatherQuotes.wind);
-  					break;
-  				case "fog":
-  					$(".quote").text(weatherQuotes.fog);
-  					break;
-  				case "cloudy":
-  					$(".quote").text(weatherQuotes.cloudy);
-  					break;
-  				case "partlyCloudy":
-  					$(".quote").text(weatherQuotes.partlyCloudy);
-  					break;
-  				default:
-  					$(".quote").text(weatherQuotes.default);
-  			}
+				//Coverting data between Celcius and Farenheight
+				tempInF = ((weatherData.currently.temperature * 9 / 5) + 32).toFixed(1);
+				tempInC = (weatherData.currently.temperature).toFixed(1);
+				feelsLikeInC = (weatherData.currently.apparentTemperature).toFixed(1);
+				feelsLikeInF = ((weatherData.currently.apparentTemperature * 9 / 5) + 32).toFixed(1);
+
+				//Load Quotes
+				var selectQuote = weatherData.currently.icon;
+				var loadQuote = $(".quote");
+				switch (weatherData.currently.icon) {
+					case "clear-day":
+						$(".quote").text(weatherQuotes.clearDay);
+						break;
+					case "clear-night":
+						$(".quote").text(weatherQuotes.clearNight);
+						break;
+					case "rain":
+						$(".quote").text(weatherQuotes.rain);
+						break;
+					case "snow":
+						$(".quote").text(weatherQuotes.snow);
+						break;
+					case "sleet":
+						$(".quote").text(weatherQuotes.sleet);
+						break;
+					case "clear-night":
+						$(".quote").text(weatherQuotes.clearNight);
+						break;
+					case "wind":
+						$(".quote").text(weatherQuotes.wind);
+						break;
+					case "fog":
+						$(".quote").text(weatherQuotes.fog);
+						break;
+					case "cloudy":
+						$(".quote").text(weatherQuotes.cloudy);
+						break;
+					case "partlyCloudy":
+						$(".quote").text(weatherQuotes.partlyCloudy);
+						break;
+					default:
+						$(".quote").text(weatherQuotes.default);
+				}
+				resolve(Object.assign(weatherData));
 			}
 		});
-	}
-
-	//Calling the function to locate user and fetch the data
-	//locateYou();
-
-	//Function for converting UNIX time to Local Time
-	function unixToTime(unix) {
-		unix *= 1000;
-		var toTime = new Date(unix);
-		var hour = ((toTime.getHours() % 12 || 12 ) < 10 ? '0' : '') + (toTime.getHours() % 12 || 12);
-  	var minute = (toTime.getMinutes() < 10 ? '0' : '') + toTime.getMinutes();
-  	timeFormatted = hour+":"+minute;
-  	return timeFormatted;
-	}
-
-	function unixToWeekday(unix) {
-		unix *= 1000;
-		var toWeekday = new Date(unix);
-		var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-		var weekday = days[toWeekday.getDay()];
-		return weekday;
-	}
-
-	//UI Tweaks
-	$(".convertToggle").on("click", function() {
-		$(".toggleIcon").toggleClass("ion-toggle-filled");
-		var tmpNow = $(".currentTemp");
-		var unit = $(".unit");
-		var feelsLike = $(".feelsLike");
-
-		if (tmpNow.text() == tempInC) {
-			tmpNow.text(tempInF);
-			unit.text("°F");
-			feelsLike.text(feelsLikeInF + " °F")
-		} else {
-			tmpNow.text(tempInC);
-			unit.text("°C");
-			feelsLike.text(feelsLikeInC + " °C")
-		}
-	});
-
-
-	//Smooth Scrool to Weekly Forecast section
-	$(".goToWeek").on("click", function() {
-		$('html, body').animate({
-	    scrollTop: $("#weeklyForecast").offset().top
-		}, 1000);
-	});
-
-
-
-function showCondition(){
-	//Initiate wow.js
-	new WOW().init();
-	const weatherSection = document.getElementById('weather-section');
-	// const dailyForecast = document.getElementById('dailyForecast');
-	const statusSection = document.getElementById('status-section');
-	weatherSection.style.display="block";
-	// dailyForecast.style.display = "flex";
-	statusSection.style.display = "none";
+	})
 }
+
+//Calling the function to locate user and fetch the data
+//locateYou();
+
+//Function for converting UNIX time to Local Time
+function unixToTime(unix) {
+	unix *= 1000;
+	var toTime = new Date(unix);
+	var hour = ((toTime.getHours() % 12 || 12) < 10 ? '0' : '') + (toTime.getHours() % 12 || 12);
+	var minute = (toTime.getMinutes() < 10 ? '0' : '') + toTime.getMinutes();
+	timeFormatted = hour + ":" + minute;
+	return timeFormatted;
+}
+
+function unixToWeekday(unix) {
+	unix *= 1000;
+	var toWeekday = new Date(unix);
+	var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	var weekday = days[toWeekday.getDay()];
+	return weekday;
+}
+
+//UI Tweaks
+$(".convertToggle").on("click", function () {
+	$(".toggleIcon").toggleClass("ion-toggle-filled");
+	var tmpNow = $(".currentTemp");
+	var unit = $(".unit");
+	var feelsLike = $(".feelsLike");
+
+	if (tmpNow.text() == tempInC) {
+		tmpNow.text(tempInF);
+		unit.text("°F");
+		feelsLike.text(feelsLikeInF + " °F")
+	} else {
+		tmpNow.text(tempInC);
+		unit.text("°C");
+		feelsLike.text(feelsLikeInC + " °C")
+	}
+});
+
+
+//Smooth Scrool to Weekly Forecast section
+$(".goToWeek").on("click", function () {
+	$('html, body').animate({
+		scrollTop: $("#weeklyForecast").offset().top
+	}, 1000);
+});
 
 
 /** 以下為硬體裝置端程式 */
@@ -462,6 +452,7 @@ function getCityWeatherData(longitude, latitude) {
 		// result now equals 'done'
 		console.log(result);
 		setTimeout(() => {
+			showCondition();
 			speakTTS('目前天氣晴最高溫三十度');
 		}, 4000);
 		onStart();
@@ -483,30 +474,44 @@ function getNowGEOWeatherData() {
 	async.waterfall([
 		function (callback) {
 			speakTTS('搜尋中請稍候');
-			callback(null);
+			setTimeout(() => {
+				// 為了解決延遲與同步故語音播報後等待三秒再進入下一階段
+				callback(null);
+			}, 3000);
 		},
 		function (callback) {
 			// Google API取得目前地址
 			getLocation().then((data) => {
 				// 前端渲染地址
-				console.log(data.results);
 				$(".locName").html(data.results[4].formatted_address);
 				callback(null, data);
 			});
 
 		},
-		function (arg1, callback) {
-			// arg1 now equals 'three'
-			getWeather();
-			callback(null, 'done now location weather');
+		function (addressData, callback) {
+			// 取得地址
+			getWeather().then(function (weatherData) {
+				const result = { addressData, weatherData };
+				callback(null, addressData, weatherData);
+			});
 		}
-	], function (err, result) {
-		// result now equals 'done'
-		console.log(result);
+	], function (err, addressData, weatherData) {
+		// 取得地址和天氣資訊
+		console.log(addressData);
+		console.log(weatherData);
+		showCondition();
 		speakTTS('目前台南市天氣晴最高溫36度最低溫18度');
-		getWeather();
 		onStart();
 	});
 
 }
 
+
+function showCondition() {
+	//Initiate wow.js
+	new WOW().init();
+	const weatherSection = document.getElementById('weather-section');
+	const statusSection = document.getElementById('status-section');
+	weatherSection.style.display = "block";
+	statusSection.style.display = "none";
+}
