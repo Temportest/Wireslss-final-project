@@ -221,9 +221,17 @@ $(document).ready(function() {
 	// }
 	// google.maps.event.addDomListener(window, 'load', initialize);
   
-	//Initiate wow.js
-	new WOW().init();
+  
 });
 
 
-
+function show(){
+	//Initiate wow.js
+	new WOW().init();
+	const weatherSection = document.getElementById('weather-section');
+	// const dailyForecast = document.getElementById('dailyForecast');
+	const statusSection = document.getElementById('status-section');
+	weatherSection.style.display="block";
+	// dailyForecast.style.display = "flex";
+	statusSection.style.display = "none";
+}
