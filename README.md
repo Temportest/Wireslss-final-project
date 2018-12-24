@@ -55,4 +55,4 @@ let zhText='請問您要查詢哪裡的天氣';
 
 
 [license-image]: https://img.shields.io/npm/l/express.svg?registry_uri=https%3A%2F%2Fregistry.npmjs.com
-[license-url]: https://github.com/andy6804tw/Wireslss-final-project/blob/master/LICENSE
+[license-url]: https://github.com/Temporatry/Wireslss-final-project/blob/master/LICENSE
