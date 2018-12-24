@@ -1,12 +1,19 @@
 {
   "dependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "mocha": "^5.2.0"
   },
   "scripts": {
     "start": "node index.js",
     "test": "nyc mocha --timeout 1000",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.2",
+    "nyc": "^13.1.0"
   }
 }
