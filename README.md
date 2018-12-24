@@ -82,6 +82,10 @@ let zhText='請問您要查詢哪裡的天氣';
   document.write("</audio>");
 ```
 
+## Screenshot
+![](./screenshot/img01.jpg)
+![](./screenshot/img02.jpg)
+![](./screenshot/img03.jpg)
 
 ## Reference
 [Geocoding API ](https://maps.googleapis.com/maps/api/geocode/json?latlng=22.9926949,120.2155742&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU)
