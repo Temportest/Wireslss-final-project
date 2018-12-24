@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/Temporatry/Wireslss-final-project.svg?branch=master)](https://travis-ci.org/Temporatry/Wireslss-final-project)
+[![GitHub license][license-image]][license-url]
+
 ## 語音辨識
 ```js
 function myclick(){
@@ -49,3 +52,7 @@ let zhText='請問您要查詢哪裡的天氣';
 
 - [local-weather-app](https://wireless-project.nutn-oase-lab.tk/local-weather-app)
 
+
+
+[license-image]: https://img.shields.io/npm/l/express.svg?registry_uri=https%3A%2F%2Fregistry.npmjs.com
+[license-url]: https://github.com/andy6804tw/Wireslss-final-project/blob/master/LICENSE
