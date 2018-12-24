@@ -4,5 +4,7 @@ node_js:
   - "8"
   - "7"
   - "6"
-script: cd server
+script: 
+  - cd server
+  - npm run test
 #after_success: npm run coverage
