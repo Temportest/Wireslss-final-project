@@ -1,10 +1,14 @@
 [![Build Status](https://travis-ci.org/Temporatry/Wireslss-final-project.svg?branch=master)](https://travis-ci.org/Temporatry/Wireslss-final-project)
 [![GitHub license][license-image]][license-url]
 
-## 互動式氣象小幫手
-情境：糕點麵包師傅做麵團因為天氣與環境因素會導致發酵出來的麵團不是最好的，因此利用我們的環境查詢裝置可以立即得知目前室內溫濕度狀況以及外面的天氣狀況。
+# 互動式氣象小幫手
+情境：
 
-使用方法：使用者可以利用超音波感測器來觸發語音辨識詢問目前該地區的即時天氣，此外我們裝置含有溫濕度感測器，可以偵測使用者該環境下的溫濕度狀況。
+糕點麵包師傅做麵團因為天氣與環境因素會導致發酵出來的麵團不是最好的，因此利用我們的環境查詢裝置可以立即得知目前室內溫濕度狀況以及外面的天氣狀況。
+
+使用方法：
+
+使用者可以利用超音波感測器來觸發語音辨識詢問目前該地區的即時天氣，此外我們裝置含有溫濕度感測器，可以偵測使用者該環境下的溫濕度狀況。
 
 設備：
 - Arduino Fly(1) 
@@ -83,23 +87,20 @@ let zhText='請問您要查詢哪裡的天氣';
 ![](./screenshot/img02.jpg)
 ![](./screenshot/img03.jpg)
 
+## Reference
+[Geocoding API ](https://maps.googleapis.com/maps/api/geocode/json?latlng=22.9926949,120.2155742&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU)
 
-- [Geocoding API ](https://maps.googleapis.com/maps/api/geocode/json?latlng=22.9926949,120.2155742&key=AIzaSyC8UY5L0pC6c3PaOZRcVr8u0R5cuxFC8qU)
+[Geocoding API DOC](https://developers.google.com/maps/documentation/geocoding/start)
 
-- [Geocoding API DOC](https://developers.google.com/maps/documentation/geocoding/start)
+[baidu TTS API](http://api.map.baidu.com/geocoder?output=json&location=22.9926949,120.2155742&ak=esNPFDwwsXWtsQfw4NMNmur1)
 
-- [baidu API](http://api.map.baidu.com/geocoder?output=json&location=22.9926949,120.2155742&ak=esNPFDwwsXWtsQfw4NMNmur1
-)
+[Google tran API blog](https://note.pcwu.net/2017/02/08/tts-api/)
 
-- [Google tran API blog](https://note.pcwu.net/2017/02/08/tts-api/)
+[天氣查詢](https://temporatry.github.io/Wireslss-final-project/local-weather-app/index.html)
 
+[Demo Web](https://wireless-project.nutn-oase-lab.tk/demo)
 
-- [天氣查詢](https://temporatry.github.io/Wireslss-final-project/local-weather-app/index.html)
-
-
-- [Demo Web](https://wireless-project.nutn-oase-lab.tk/demo)
-
-- [local-weather-app](https://wireless-project.nutn-oase-lab.tk/local-weather-app)
+[local-weather-app](https://wireless-project.nutn-oase-lab.tk/local-weather-app)
 
 
 
