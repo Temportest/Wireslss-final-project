@@ -4,7 +4,7 @@
     "chai-http": "^4.2.0",
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "mocha": "^5.2.0"
   },
   "scripts": {
